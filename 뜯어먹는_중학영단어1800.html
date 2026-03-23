@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>뜯어먹는 중학 영단어 1800</title>
+<style>
+:root{
+  --green:#2e7d32;
+  --green-light:#43a047;
+  --green-bg:#f1f8f1;
+  --green-card:#e8f5e9;
+  --green-border:#c8e6c9;
+  --yellow:#f9a825;
+  --red:#e53935;
+  --text:#1b2e1b;
+  --text2:#4a6449;
+  --text3:#8aab88;
+  --white:#fff;
+  --shadow:0 2px 12px rgba(46,125,50,0.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+
+/* ── 공통 헤더 ── */
+.hdr{
+  position:sticky;top:0;z-index:100;
+  background:var(--green);
+  padding:0 16px;
+  height:52px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.hdr-back{
+  background:rgba(255,255,255,0.18);
+  border:none;color:#fff;
+  width:34px;height:34px;
+  border-radius:10px;
+  font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.hdr-title{
+  font-size:1rem;font-weight:700;color:#fff;
+  flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ══════════════════════════════
+   홈 화면
+══════════════════════════════ */
+#homeScreen{display:block}
+.home-hero{
+  background:var(--green);
+  padding:28px 20px 32px;
+  text-align:center;
+  color:#fff;
+}
+.home-badge{
+  display:inline-block;
+  background:rgba(255,255,255,0.18);
+  border-radius:20px;
+  padding:4px 14px;
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
+.home-title{
+  font-size:1.55rem;font-weight:900;
+  line-height:1.3;margin-bottom:6px;
+}
+.home-sub{
+  font-size:0.82rem;opacity:0.78;
+}
+.home-body{padding:20px 16px 40px;}
+.section-label{
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:2px;color:var(--text3);
+  text-transform:uppercase;
+  margin-bottom:12px;margin-top:4px;
+}
+.day-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:28px;
+}
+.day-card{
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:12px;
+  padding:10px 4px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.15s;
+  box-shadow:var(--shadow);
+}
+.day-card:active{transform:scale(0.94);background:var(--green-card);}
+.day-card-num{
+  font-size:0.65rem;color:var(--text3);
+  font-weight:600;margin-bottom:2px;
+}
+.day-card-label{
+  font-size:0.95rem;font-weight:800;color:var(--green);
+}
+.home-footer{
+  text-align:center;padding:20px 0 8px;
+  font-size:0.72rem;font-weight:700;
+  color:var(--text3);letter-spacing:1px;
+}
+
+/* ══════════════════════════════
+   단어 화면
+══════════════════════════════ */
+#studyScreen{display:none;}
+
+/* 모드 탭 */
+.mode-tabs{
+  display:flex;gap:0;
+  background:var(--white);
+  border-bottom:2px solid var(--green-border);
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.mode-tabs::-webkit-scrollbar{display:none}
+.mode-tab{
+  flex:0 0 auto;
+  padding:12px 16px;
+  border:none;background:transparent;
+  font-size:0.82rem;font-weight:700;
+  color:var(--text3);cursor:pointer;
+  white-space:nowrap;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  transition:all 0.15s;
+}
+.mode-tab.active{color:var(--green);border-bottom-color:var(--green);}
+
+/* 툴바 */
+.toolbar{
+  display:flex;gap:8px;padding:10px 14px;
+  background:var(--green-bg);
+  border-bottom:1px solid var(--green-border);
+  align-items:center;
+  overflow-x:auto;scrollbar-width:none;
+}
+.toolbar::-webkit-scrollbar{display:none}
+.tool-btn{
+  flex:0 0 auto;
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  color:var(--text2);
+  padding:7px 13px;border-radius:20px;
+  font-size:0.78rem;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+  transition:all 0.15s;
+}
+.tool-btn.on{background:var(--green);color:#fff;border-color:var(--green);}
+.spacer{flex:1;min-width:4px;}
+.shuffle-btn{
+  flex:0 0 auto;
+  background:var(--text);color:#fff;
+  border:none;padding:7px 14px;border-radius:20px;
+  font-size:0.78rem;font-weight:700;cursor:pointer;
+}
+
+/* 단어 목록 */
+.word-list{padding:10px 14px 100px;}
+.word-item{
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:14px;
+  padding:14px 14px;
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:var(--shadow);
+}
+.word-eng{
+  font-size:1.05rem;font-weight:800;
+  color:var(--text);flex:0 0 auto;
+  min-width:110px;max-width:140px;
+  letter-spacing:-0.3px;
+}
+.word-eng.blur span.eng-txt{filter:blur(5px);user-select:none;}
+.word-kor{
+  font-size:0.85rem;color:var(--text2);
+  line-height:1.45;flex:1;
+}
+.word-kor.blur{filter:blur(5px);user-select:none;}
+.spk-btn{
+  flex:0 0 34px;height:34px;
+  background:var(--green-card);
+  border:none;border-radius:10px;
+  font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--green);
+}
+.spk-btn.playing{background:var(--green);color:#fff;}
+
+/* ── 플래시카드 ── */
+#fcPane{display:none;padding:16px 16px 100px;}
+.fc-progress-wrap{
+  background:var(--green-border);
+  border-radius:4px;height:5px;
+  margin-bottom:10px;overflow:hidden;
+}
+.fc-progress-bar{
+  height:100%;background:var(--green);
+  border-radius:4px;transition:width 0.3s;
+}
+.fc-counter{
+  text-align:right;font-size:0.75rem;
+  color:var(--text3);font-weight:600;
+  margin-bottom:14px;
+}
+.fc-card{
+  width:100%;min-height:220px;
+  perspective:1000px;cursor:pointer;
+  margin-bottom:20px;
+}
+.fc-inner{
+  width:100%;min-height:220px;
+  position:relative;transform-style:preserve-3d;
+  transition:transform 0.45s cubic-bezier(.4,0,.2,1);
+}
+.fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-face{
+  position:absolute;width:100%;min-height:220px;
+  backface-visibility:hidden;
+  background:var(--white);
+  border:2px solid var(--green-border);
+  border-radius:20px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:28px 24px;
+  box-shadow:var(--shadow);
+}
+.fc-face.back{
+  transform:rotateY(180deg);
+  background:var(--green-card);
+  border-color:var(--green);
+}
+.fc-hint{font-size:0.65rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.fc-word{font-size:2rem;font-weight:900;color:var(--text);text-align:center;letter-spacing:-0.5px;}
+.fc-meaning{font-size:1.1rem;color:var(--text);text-align:center;line-height:1.6;font-weight:600;}
+.fc-tap{font-size:0.72rem;color:var(--text3);margin-top:14px;}
+.fc-spk{
+  position:absolute;bottom:14px;right:14px;
+  background:var(--green-card);border:none;
+  width:36px;height:36px;border-radius:12px;
+  font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.fc-nav{display:flex;gap:12px;justify-content:center;align-items:center;}
+.fc-nav-btn{
+  background:var(--white);
+  border:2px solid var(--green-border);
+  color:var(--text);
+  width:52px;height:52px;border-radius:14px;
+  font-size:1.3rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);
+}
+.fc-nav-btn:disabled{opacity:0.3;}
+.fc-shuffle{
+  background:var(--green);color:#fff;
+  border:none;padding:0 22px;height:52px;
+  border-radius:14px;font-size:0.85rem;font-weight:700;cursor:pointer;
+}
+
+/* ── 퀴즈 / 뜻 객관식 공통 ── */
+#quizPane,#meaningPane{display:none;padding:14px 14px 100px;}
+.score-row{display:flex;gap:8px;margin-bottom:14px;}
+.score-box{
+  flex:1;background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:12px;padding:10px 6px;
+  text-align:center;box-shadow:var(--shadow);
+}
+.score-n{font-size:1.5rem;font-weight:900;}
+.score-n.g{color:var(--green)}
+.score-n.r{color:var(--red)}
+.score-n.b{color:var(--yellow)}
+.score-l{font-size:0.65rem;color:var(--text3);font-weight:600;margin-top:2px;}
+.quiz-q-box{
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:16px;padding:22px 18px;
+  margin-bottom:14px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.quiz-qlabel{font-size:0.65rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.quiz-qword{
+  font-size:2rem;font-weight:900;color:var(--text);
+  letter-spacing:-0.5px;
+}
+.quiz-qkor{font-size:1rem;color:var(--text2);margin-top:6px;font-weight:600;}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.qopt{
+  background:var(--white);
+  border:2px solid var(--green-border);
+  color:var(--text);
+  padding:14px 10px;border-radius:12px;
+  font-size:0.85rem;font-weight:600;
+  text-align:left;cursor:pointer;
+  line-height:1.4;
+  transition:all 0.15s;
+  box-shadow:var(--shadow);
+}
+.qopt:active:not(:disabled){transform:scale(0.97);}
+.qopt.correct{border-color:var(--green);background:#e8f5e9;color:var(--green);}
+.qopt.wrong{border-color:var(--red);background:#ffebee;color:var(--red);}
+.qopt:disabled{cursor:default;}
+.next-q-btn{
+  width:100%;background:var(--green);
+  border:none;color:#fff;
+  padding:15px;border-radius:14px;
+  font-size:0.95rem;font-weight:700;cursor:pointer;
+  display:none;
+}
+.next-q-btn.show{display:block;}
+
+/* ── 스펠링 ── */
+#spellPane{display:none;padding:14px 14px 100px;}
+.spell-q-box{
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:16px;padding:22px 18px;
+  margin-bottom:14px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.spell-prompt{font-size:0.7rem;color:var(--text3);margin-bottom:8px;letter-spacing:1px;}
+.spell-word{font-size:1.5rem;font-weight:800;color:var(--text);}
+.spell-input{
+  width:100%;background:var(--white);
+  border:2px solid var(--green-border);
+  color:var(--text);
+  padding:14px 16px;border-radius:12px;
+  font-size:1.05rem;font-weight:700;
+  outline:none;text-align:center;
+  margin-bottom:10px;
+  transition:border-color 0.2s;
+}
+.spell-input:focus{border-color:var(--green);}
+.spell-input.ok{border-color:var(--green);background:#e8f5e9;}
+.spell-input.ng{border-color:var(--red);background:#ffebee;}
+.spell-fb{min-height:22px;font-size:0.82rem;text-align:center;margin-bottom:10px;font-weight:600;}
+.spell-fb.ok{color:var(--green);}
+.spell-fb.ng{color:var(--red);}
+.spell-submit{
+  width:100%;background:var(--text);
+  border:none;color:#fff;
+  padding:15px;border-radius:14px;
+  font-size:0.95rem;font-weight:700;cursor:pointer;
+}
+
+/* ── 결과 화면 ── */
+.result-box{
+  display:none;
+  background:var(--white);
+  border:2px solid var(--green-border);
+  border-radius:20px;
+  padding:36px 24px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  margin-top:16px;
+}
+.result-box.show{display:block;}
+.result-em{font-size:3rem;margin-bottom:12px;}
+.result-title{font-size:1.6rem;font-weight:900;color:var(--green);margin-bottom:6px;}
+.result-sub{font-size:0.9rem;color:var(--text2);margin-bottom:22px;}
+.retry-btn{
+  background:var(--green-card);
+  border:2px solid var(--green-border);
+  color:var(--green);
+  padding:12px 28px;border-radius:12px;
+  font-size:0.9rem;font-weight:700;cursor:pointer;
+}
+
+/* ── 애니메이션 ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.word-item{animation:fadeUp 0.2s ease both;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake 0.3s ease;}
+
+/* ── 데이 네비 (하단) ── */
+.day-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);
+  border-top:1.5px solid var(--green-border);
+  padding:10px 14px 14px;
+  display:flex;gap:8px;align-items:center;
+  z-index:50;
+}
+.day-nav-prev,.day-nav-next{
+  flex:0 0 44px;height:44px;
+  background:var(--green-card);
+  border:1.5px solid var(--green-border);
+  border-radius:12px;
+  font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--green);font-weight:700;
+}
+.day-nav-prev:disabled,.day-nav-next:disabled{opacity:0.3;}
+.day-nav-label{
+  flex:1;text-align:center;
+  font-size:0.9rem;font-weight:800;color:var(--green);
+}
+</style>
+</head>
+<body>
+
+<!-- ══ 홈 화면 ══ -->
+<div id="homeScreen">
+  <div class="home-hero">
+    <div class="home-badge">60일 완성</div>
+    <div class="home-title">뜯어먹는<br>중학 영단어 1800</div>
+    <div class="home-sub">Day를 선택해서 학습을 시작하세요</div>
+  </div>
+  <div class="home-body">
+    <div class="section-label">Day 선택</div>
+    <div class="day-grid" id="dayGrid"></div>
+    <div class="home-footer">ENCHOOL</div>
+  </div>
+</div>
+
+<!-- ══ 학습 화면 ══ -->
+<div id="studyScreen">
+  <div class="hdr">
+    <button class="hdr-back" onclick="goHome()">‹</button>
+    <div class="hdr-title" id="studyTitle">Day 1</div>
+  </div>
+
+  <!-- 모드 탭 -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="list"    onclick="switchMode('list')">목록</button>
+    <button class="mode-tab"        data-mode="fc"      onclick="switchMode('fc')">플래시카드</button>
+    <button class="mode-tab"        data-mode="quiz"    onclick="switchMode('quiz')">객관식</button>
+    <button class="mode-tab"        data-mode="meaning" onclick="switchMode('meaning')">뜻 객관식</button>
+    <button class="mode-tab"        data-mode="spell"   onclick="switchMode('spell')">스펠링</button>
+  </div>
+
+  <!-- 목록 모드 -->
+  <div id="listPane">
+    <div class="toolbar">
+      <button class="tool-btn" id="tKor" onclick="toggleKor()">한국어 숨기기</button>
+      <button class="tool-btn" id="tEng" onclick="toggleEng()">영어 숨기기</button>
+      <div class="spacer"></div>
+      <button class="shuffle-btn" onclick="shuffleList()">🔀 셔플</button>
+    </div>
+    <div class="word-list" id="wordList"></div>
+  </div>
+
+  <!-- 플래시카드 모드 -->
+  <div id="fcPane">
+    <div class="fc-progress-wrap"><div class="fc-progress-bar" id="fcBar"></div></div>
+    <div class="fc-counter" id="fcCounter">1 / 30</div>
+    <div class="fc-card" id="fcCard" onclick="flipFC()">
+      <div class="fc-inner" id="fcInner">
+        <div class="fc-face front">
+          <div class="fc-hint">ENGLISH</div>
+          <div class="fc-word" id="fcWord"></div>
+          <div class="fc-tap">탭하여 뒤집기</div>
+          <button class="fc-spk" onclick="spkFC(event)">🔊</button>
+        </div>
+        <div class="fc-face back">
+          <div class="fc-hint">한국어 뜻</div>
+          <div class="fc-meaning" id="fcMeaning"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" id="fcPrev" onclick="fcMove(-1)">◀</button>
+      <button class="fc-shuffle" onclick="fcShuffle()">🔀 셔플</button>
+      <button class="fc-nav-btn" id="fcNext" onclick="fcMove(1)">▶</button>
+    </div>
+  </div>
+
+  <!-- 객관식 (영어→뜻) -->
+  <div id="quizPane">
+    <div class="score-row">
+      <div class="score-box"><div class="score-n g" id="qC">0</div><div class="score-l">정답</div></div>
+      <div class="score-box"><div class="score-n r" id="qW">0</div><div class="score-l">오답</div></div>
+      <div class="score-box"><div class="score-n b" id="qL">0</div><div class="score-l">남은 문제</div></div>
+    </div>
+    <div class="quiz-q-box">
+      <div class="quiz-qlabel">영단어의 뜻을 고르세요</div>
+      <div class="quiz-qword" id="qWord"></div>
+    </div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <button class="next-q-btn" id="qNext" onclick="nextQ('quiz')">다음 문제 →</button>
+    <div class="result-box" id="qResult">
+      <div class="result-em" id="qEm">🎉</div>
+      <div class="result-title">완료!</div>
+      <div class="result-sub" id="qSub"></div>
+      <button class="retry-btn" onclick="startQuiz()">다시 풀기</button>
+    </div>
+  </div>
+
+  <!-- 뜻 객관식 (뜻→영어) -->
+  <div id="meaningPane">
+    <div class="score-row">
+      <div class="score-box"><div class="score-n g" id="mC">0</div><div class="score-l">정답</div></div>
+      <div class="score-box"><div class="score-n r" id="mW">0</div><div class="score-l">오답</div></div>
+      <div class="score-box"><div class="score-n b" id="mL">0</div><div class="score-l">남은 문제</div></div>
+    </div>
+    <div class="quiz-q-box">
+      <div class="quiz-qlabel">뜻에 맞는 영단어를 고르세요</div>
+      <div class="quiz-qkor" id="mWord"></div>
+    </div>
+    <div class="quiz-opts" id="mOpts"></div>
+    <button class="next-q-btn" id="mNext" onclick="nextQ('meaning')">다음 문제 →</button>
+    <div class="result-box" id="mResult">
+      <div class="result-em" id="mEm">🧠</div>
+      <div class="result-title">완료!</div>
+      <div class="result-sub" id="mSub"></div>
+      <button class="retry-btn" onclick="startMeaning()">다시 풀기</button>
+    </div>
+  </div>
+
+  <!-- 스펠링 -->
+  <div id="spellPane">
+    <div class="score-row">
+      <div class="score-box"><div class="score-n g" id="spC">0</div><div class="score-l">정답</div></div>
+      <div class="score-box"><div class="score-n r" id="spW">0</div><div class="score-l">오답</div></div>
+      <div class="score-box"><div class="score-n b" id="spL">0</div><div class="score-l">남은 문제</div></div>
+    </div>
+    <div class="spell-q-box">
+      <div class="spell-prompt">뜻을 보고 영어 단어를 입력하세요</div>
+      <div class="spell-word" id="spWord"></div>
+    </div>
+    <input class="spell-input" id="spInput" placeholder="영어 입력..." autocomplete="off" spellcheck="false"
+      onkeydown="if(event.key==='Enter')submitSpell()">
+    <div class="spell-fb" id="spFb"></div>
+    <button class="spell-submit" onclick="submitSpell()">확인</button>
+    <div class="result-box" id="spResult">
+      <div class="result-em">✏️</div>
+      <div class="result-title">완료!</div>
+      <div class="result-sub" id="spSub"></div>
+      <button class="retry-btn" onclick="startSpell()">다시 풀기</button>
+    </div>
+  </div>
+
+  <!-- 하단 Day 네비 -->
+  <div class="day-nav">
+    <button class="day-nav-prev" id="dnPrev" onclick="changeDay(-1)">◀</button>
+    <div class="day-nav-label" id="dnLabel">Day 1</div>
+    <button class="day-nav-next" id="dnNext" onclick="changeDay(1)">▶</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════
+//  VOCAB DATA
+// ════════════════════════════════════
+const VOCAB={
+"Day 1":[{w:"life",m:"삶[인생/생활], 생명"},{w:"person",m:"사람"},{w:"job",m:"일, 일자리"},{w:"earth",m:"지구, 땅"},{w:"country",m:"나라, 시골"},{w:"way",m:"방법[방식], 길"},{w:"story",m:"이야기, 층"},{w:"movie",m:"영화(관)"},{w:"problem",m:"문제"},{w:"lot",m:"(수량이) 많음"},{w:"hand",m:"손, 건네주다"},{w:"place",m:"장소, 두다[놓다]"},{w:"call",m:"전화하다, 부르다, 통화, 부름"},{w:"start",m:"시작하다, 출발하다, 시작, 출발"},{w:"try",m:"노력하다, ~해 보다, 시도"},{w:"use",m:"사용[이용](하다)"},{w:"kind",m:"종류, 친절한"},{w:"fun",m:"재미(있는), 장난"},{w:"future",m:"미래(의), 장래"},{w:"have",m:"가지고 있다, 먹다, ~하게 하다"},{w:"make",m:"만들다, ~하게 하다"},{w:"let",m:"~하게 하다[허락하다]"},{w:"get",m:"얻다, 이르다, 되다"},{w:"take",m:"데려[가져]가다, 필요로 하다, 받다"},{w:"different",m:"다른"},{w:"important",m:"중요한"},{w:"right",m:"옳은, 오른쪽(의), 바로, 권리"},{w:"sure",m:"확신하는, 물론"},{w:"well",m:"잘, 건강한, 우물"},{w:"hard",m:"열심히, 단단한, 어려운"}],
+"Day 2":[{w:"piece",m:"(한) 부분[조각], 한 개[하나]"},{w:"example",m:"예, 모범"},{w:"minute",m:"분, 잠깐[순간]"},{w:"trip",m:"여행"},{w:"letter",m:"편지, 글자"},{w:"language",m:"언어"},{w:"science",m:"과학"},{w:"fire",m:"불, 화재, 해고하다, 발사하다"},{w:"name",m:"이름, 이름을 붙이다"},{w:"part",m:"부분, 부품, 역할, 헤어지다"},{w:"plan",m:"계획(하다)"},{w:"plant",m:"식물, 공장, 심다"},{w:"practice",m:"연습(하다), 실행(하다), 관행"},{w:"turn",m:"돌(리)다, 바뀌다[바꾸다], 차례, 회전"},{w:"need",m:"필요(하다), 욕구"},{w:"learn",m:"배우다, 알게 되다"},{w:"keep",m:"유지하다, 계속하다, 보존하다"},{w:"find",m:"찾아내다[발견하다]"},{w:"become",m:"~이 되다[~(해)지다]"},{w:"live",m:"살다, 살아 있는"},{w:"mean",m:"의미하다, 의도하다, 못된"},{w:"last",m:"지난, 마지막의, 계속되다"},{w:"any",m:"어떤 (것), 아무(것)"},{w:"each",m:"각각(의)"},{w:"other",m:"다른 (것[사람])"},{w:"another",m:"또 하나의 (것[사람]), 다른 (것[사람])"},{w:"same",m:"같은 (것[사람])"},{w:"too",m:"너무, ~도"},{w:"also",m:"~도"},{w:"really",m:"정말[진짜]"}],
+"Day 3":[{w:"restaurant",m:"레스토랑[식당]"},{w:"street",m:"거리[도로]"},{w:"side",m:"측[쪽], 측면, 옆"},{w:"space",m:"공간, 우주"},{w:"art",m:"미술, 예술, 기술"},{w:"culture",m:"문화"},{w:"activity",m:"활동"},{w:"weekend",m:"주말"},{w:"information",m:"정보"},{w:"face",m:"얼굴, 직면하다"},{w:"mind",m:"마음, 언짢아하다"},{w:"work",m:"일(하다), 공부(하다), 작동[작용]하다"},{w:"watch",m:"지켜보다, 시계"},{w:"worry",m:"걱정시키다[걱정하다], 걱정(거리)"},{w:"change",m:"바꾸다, 변화(하다), 거스름돈"},{w:"light",m:"빛, 불(을 붙이다), 밝은, 가벼운"},{w:"present",m:"선물, 현재(의), 출석한"},{w:"middle",m:"한가운데(의)"},{w:"favorite",m:"가장 좋아하는 (것[사람])"},{w:"enjoy",m:"즐기다"},{w:"win",m:"이기다, 따다[얻다]"},{w:"understand",m:"이해하다"},{w:"warm",m:"따뜻한, 따뜻하게 하다"},{w:"clean",m:"깨끗한, 청소하다"},{w:"own",m:"자신의 (것), 소유하다"},{w:"interesting",m:"재미있는"},{w:"famous",m:"유명한"},{w:"special",m:"특별[특수]한, 전문의"},{w:"fast",m:"빨리, 단단히, 빠른"},{w:"only",m:"단지[오직], 유일한"}],
+"Day 4":[{w:"clothes",m:"옷[의복]"},{w:"poem",m:"시"},{w:"nature",m:"자연, 천성"},{w:"forest",m:"숲"},{w:"island",m:"섬"},{w:"village",m:"마을"},{w:"state",m:"국가, (미국의) 주, 상태"},{w:"habit",m:"습관"},{w:"history",m:"역사"},{w:"dialogue",m:"대화"},{w:"newspaper",m:"신문"},{w:"vacation",m:"휴가[방학]"},{w:"store",m:"가게, 비축[저장]하다"},{w:"sound",m:"소리, ~처럼 들리다, 건전한[건강한]"},{w:"point",m:"(요)점, 점수, 가리키다"},{w:"land",m:"땅[육지], 착륙하다"},{w:"fall",m:"떨어지다, 넘어지다, 가을, 떨어짐, 폭포"},{w:"fly",m:"날다, 파리"},{w:"visit",m:"방문(하다)"},{w:"begin",m:"시작하다"},{w:"grow",m:"자라다, 기르다, ~해지다"},{w:"believe",m:"믿다"},{w:"save",m:"구하다, 저축[절약]하다"},{w:"participate",m:"참가[참여]하다"},{w:"please",m:"제발, 기쁘게 하다"},{w:"easy",m:"쉬운, 편한"},{w:"poor",m:"가난한, 불쌍한, 잘 못하는"},{w:"such",m:"그러한, 그렇게[너무나]"},{w:"just",m:"막, 꼭, 단지"},{w:"always",m:"늘[언제나]"}],
+"Day 5":[{w:"war",m:"전쟁"},{w:"soldier",m:"군인[병사]"},{w:"vegetable",m:"채소[야채]"},{w:"leaf",m:"잎"},{w:"bottle",m:"병"},{w:"machine",m:"기계"},{w:"area",m:"지역, 분야, 면적"},{w:"grade",m:"성적, 등급, 학년"},{w:"advertisement",m:"광고"},{w:"spring",m:"봄, 용수철, 샘, 튀다"},{w:"rock",m:"바위, 록 음악, 흔들다"},{w:"line",m:"선, 줄(을 서다)"},{w:"exercise",m:"운동(하다), 연습(하다)"},{w:"cook",m:"요리하다, 요리사"},{w:"stay",m:"머무르다, 그대로 있다, 머무름"},{w:"break",m:"깨뜨리다, 고장 내다, 어기다, 휴식"},{w:"front",m:"앞(쪽)(의)"},{w:"second",m:"제2의, 초, 잠깐"},{w:"cold",m:"추운, 차가운, 감기, 추위"},{w:"happen",m:"일어나다, 우연히 ~하다"},{w:"leave",m:"떠나다, 내버려두다, 남기다"},{w:"remember",m:"기억하다"},{w:"wear",m:"입고[신고/쓰고] 있다"},{w:"move",m:"움직이다, 이사하다, 감동시키다"},{w:"send",m:"보내다"},{w:"large",m:"큰, 넓은"},{w:"amazing",m:"놀라운"},{w:"early",m:"초기의, 이른, 일찍"},{w:"often",m:"자주[흔히]"},{w:"sometimes",m:"때때로"}],
+"Day 6":[{w:"peace",m:"평화"},{w:"neighbor",m:"이웃 (사람[나라])"},{w:"pet",m:"애완동물"},{w:"brain",m:"(두)뇌"},{w:"age",m:"나이, 시대"},{w:"subject",m:"과목, 주제"},{w:"fact",m:"사실"},{w:"price",m:"값[가격]"},{w:"custom",m:"관습[풍습]"},{w:"office",m:"사무실, 관청"},{w:"park",m:"공원, 주차하다"},{w:"rule",m:"규칙, 지배(하다)"},{w:"respect",m:"존경[존중](하다)"},{w:"check",m:"점검[확인](하다), 수표"},{w:"bring",m:"가져[데려]오다"},{w:"build",m:"짓다[건축/건설하다]"},{w:"join",m:"가입하다, 함께하다"},{w:"lose",m:"잃다, 지다"},{w:"die",m:"죽다"},{w:"half",m:"(절)반(의), 반쯤"},{w:"few",m:"소수(의), 몇몇(의)"},{w:"both",m:"양쪽[둘 다](의)"},{w:"sick",m:"병든[아픈]"},{w:"busy",m:"바쁜, 번화한, 통화 중의"},{w:"real",m:"진짜[현실]의"},{w:"wrong",m:"틀린[잘못된], 틀리게"},{w:"most",m:"대부분(의), 가장 (많은)"},{w:"late",m:"늦은, 늦게"},{w:"fortunately",m:"운 좋게도[다행히]"},{w:"even",m:"~조차(도), 훨씬"}],
+"Day 7":[{w:"health",m:"건강"},{w:"holiday",m:"(공)휴일"},{w:"gift",m:"선물, 재능"},{w:"goal",m:"목표[목적], 골[득점]"},{w:"effect",m:"영향[결과/효과]"},{w:"field",m:"들판, 경기장, 분야, 현장"},{w:"magazine",m:"잡지"},{w:"sign",m:"표지판, 신호(하다), 서명하다"},{w:"report",m:"보고[보도](하다)"},{w:"order",m:"순서, 질서, 명령(하다), 주문(하다)"},{w:"experience",m:"경험(하다)"},{w:"result",m:"결과(로 생기다)"},{w:"ride",m:"타다, 타기, 탈것"},{w:"wish",m:"바라다[빌다], 소원[소망]"},{w:"human",m:"인간(의), 인간다운"},{w:"past",m:"지나간, 과거(의), ~을 지나서"},{w:"carry",m:"가지고 있다, 나르다"},{w:"draw",m:"그리다, 끌어당기다, 뽑다"},{w:"spend",m:"(시간/돈을) 쓰다"},{w:"wait",m:"기다리다"},{w:"decide",m:"결정하다"},{w:"choose",m:"고르다[선택하다]"},{w:"true",m:"사실인, 진짜의, 참된"},{w:"popular",m:"인기 있는, 대중의"},{w:"difficult",m:"어려운"},{w:"foreign",m:"외국의"},{w:"able",m:"~할 수 있는"},{w:"full",m:"가득 찬"},{w:"usually",m:"보통[일반적으로]"},{w:"never",m:"결코 ~ 않다"}],
+"Day 8":[{w:"dish",m:"접시, 요리"},{w:"toy",m:"장난감"},{w:"subway",m:"지하철"},{w:"voice",m:"목소리"},{w:"event",m:"사건[행사]"},{w:"opinion",m:"의견[견해]"},{w:"solution",m:"해법[해답]"},{w:"allowance",m:"용돈[수당]"},{w:"hundred",m:"백[100]"},{w:"thousand",m:"천[1000]"},{w:"century",m:"세기[100년]"},{w:"rest",m:"휴식, 나머지, 쉬다"},{w:"waste",m:"낭비(하다), 쓰레기"},{w:"surprise",m:"놀라게 하다, 놀람"},{w:"bear",m:"낳다, 곰"},{w:"fight",m:"싸우다, 싸움"},{w:"buy",m:"사다"},{w:"sell",m:"팔다"},{w:"follow",m:"따르다"},{w:"miss",m:"놓치다, 그리워하다"},{w:"close",m:"닫다, 가까운, 가까이"},{w:"free",m:"자유로운, 무료의, 자유롭게 하다"},{w:"upset",m:"속상한, 속상하게 하다"},{w:"healthy",m:"건강한, 건강에 좋은"},{w:"delicious",m:"맛있는"},{w:"sad",m:"슬픈"},{w:"careful",m:"조심하는[주의 깊은]"},{w:"ready",m:"준비된"},{w:"away",m:"떨어져, 떠나서"},{w:"however",m:"그러나[그렇지만]"}],
+"Day 9":[{w:"president",m:"대통령, 장(長)"},{w:"diary",m:"일기(장)"},{w:"cartoon",m:"만화 (영화)"},{w:"meal",m:"식사"},{w:"character",m:"성격, (등장)인물, 글자"},{w:"reason",m:"이유, 이성"},{w:"ground",m:"땅, 운동장"},{w:"community",m:"공동체[주민/지역 사회]"},{w:"glass",m:"유리(잔), 안경"},{w:"weight",m:"무게, 몸무게[체중]"},{w:"control",m:"지배[통제](하다), 조절하다"},{w:"step",m:"걸음, 단계, 계단, 밟다"},{w:"matter",m:"문제[일], 중요하다"},{w:"match",m:"시합, 성냥, 어울리다"},{w:"set",m:"두다, 세우다, (해가) 지다, 세트"},{w:"catch",m:"(붙)잡다, (병에) 걸리다"},{w:"hold",m:"잡고 있다, 개최하다"},{w:"pick",m:"고르다, 따다, 뽑다"},{w:"teach",m:"가르치다"},{w:"agree",m:"동의하다[의견이 일치하다]"},{w:"invent",m:"발명하다"},{w:"welcome",m:"환영(하다), 환영받는"},{w:"bright",m:"빛나는[밝은], 똑똑한"},{w:"smart",m:"영리한[똑똑한]"},{w:"wise",m:"지혜로운[현명한]"},{w:"hungry",m:"배고픈"},{w:"fine",m:"좋은[훌륭한], 잘"},{w:"pretty",m:"예쁜, 꽤, 아주"},{w:"still",m:"아직도, 훨씬, 가만히 있는"},{w:"later",m:"나중에, 더 뒤의"}],
+"Day 10":[{w:"teenager",m:"십대 소년·소녀"},{w:"arm",m:"팔, 무기"},{w:"skill",m:"기술[기능]"},{w:"factory",m:"공장"},{w:"prize",m:"상[상품]"},{w:"chance",m:"기회, 가망[가능성]"},{w:"shape",m:"모양, 상태"},{w:"difference",m:"다름[차이]"},{w:"wall",m:"벽[담]"},{w:"contest",m:"경연[대회], 겨루다"},{w:"race",m:"경주(하다), 인종"},{w:"smell",m:"냄새(나다)"},{w:"interest",m:"관심[흥미](를 끌다)"},{w:"judge",m:"재판관, 판단하다"},{w:"cause",m:"원인(이 되다), 일으키다"},{w:"cover",m:"덮다, 다루다, 덮개"},{w:"travel",m:"여행(하다), 이동하다"},{w:"guess",m:"추측(하다)"},{w:"finish",m:"끝내다[끝나다]"},{w:"wash",m:"씻다"},{w:"introduce",m:"소개하다"},{w:"hurt",m:"다치게 하다, 아프다"},{w:"tired",m:"피곤한, 싫증난"},{w:"proud",m:"자랑스러운"},{w:"dirty",m:"더러운"},{w:"angry",m:"화난[성난]"},{w:"modern",m:"현대의, 현대적인"},{w:"useful",m:"유용한[쓸모 있는]"},{w:"soon",m:"곧, 빨리"},{w:"once",m:"한 번, (과거) 언젠가"}],
+"Day 11":[{w:"environment",m:"환경"},{w:"pollution",m:"오염"},{w:"lake",m:"호수"},{w:"desert",m:"사막"},{w:"insect",m:"곤충"},{w:"accident",m:"사고"},{w:"college",m:"대학"},{w:"exam",m:"시험"},{w:"advice",m:"조언[충고]"},{w:"hobby",m:"취미"},{w:"form",m:"형태, 형식, 형성되다"},{w:"mark",m:"표시(하다), 부호, 자국"},{w:"board",m:"판, 게시판, 탑승하다"},{w:"post",m:"우편(물), 게시하다"},{w:"laugh",m:"(비)웃다, 웃음"},{w:"excuse",m:"용서하다, 변명(하다)"},{w:"pass",m:"지나가다, 건네주다, 합격하다, 패스"},{w:"drive",m:"운전하다, 드라이브"},{w:"receive",m:"받다"},{w:"kill",m:"죽이다"},{w:"climb",m:"오르다[등반하다]"},{w:"add",m:"더하다, 덧붙이다"},{w:"fat",m:"살찐[뚱뚱한], 지방"},{w:"dark",m:"어두운, 어둠"},{w:"whole",m:"전체[전부](의)"},{w:"afraid",m:"두려워하는, 걱정하는"},{w:"physical",m:"육체[신체]의, 물질의"},{w:"dangerous",m:"위험한"},{w:"off",m:"떨어져[멀리]"},{w:"ever",m:"언제든[한번이라도]"}],
+"Day 12":[{w:"clerk",m:"사무원, 점원"},{w:"riddle",m:"수수께끼"},{w:"company",m:"회사, 함께 있음, 친구"},{w:"garage",m:"차고[주차장]"},{w:"palace",m:"궁전"},{w:"hole",m:"구멍"},{w:"bill",m:"청구서, 지폐, 법안"},{w:"seed",m:"씨(앗)"},{w:"medicine",m:"약, 의학"},{w:"luck",m:"(행)운"},{w:"meaning",m:"의미[뜻]"},{w:"volunteer",m:"자원봉사자, 자원하다"},{w:"view",m:"견해, 전망, 바라보다"},{w:"lie",m:"(누워) 있다, 거짓말(하다)"},{w:"act",m:"행동(하다), 연기(하다)"},{w:"pay",m:"지불하다, 봉급"},{w:"shout",m:"외치다, 외침"},{w:"cross",m:"건너다, 교차시키다, 십자가"},{w:"seem",m:"보이다, ~인 것 같다"},{w:"invite",m:"초대하다"},{w:"arrive",m:"도착하다"},{w:"collect",m:"모으다[수집하다]"},{w:"rich",m:"부유한, 풍부한"},{w:"blind",m:"시각 장애가 있는[눈 먼]"},{w:"heavy",m:"무거운, 심한"},{w:"terrible",m:"끔찍한[지독한]"},{w:"strange",m:"이상한, 낯선"},{w:"possible",m:"가능한"},{w:"maybe",m:"아마"},{w:"ago",m:"~ 전에"}],
+"Day 13":[{w:"sense",m:"감각"},{w:"pleasure",m:"기쁨[즐거움]"},{w:"image",m:"이미지[인상/영상/심상]"},{w:"map",m:"지도"},{w:"project",m:"프로젝트[계획/기획/과제]"},{w:"traffic",m:"교통(량)"},{w:"safety",m:"안전"},{w:"spaceship",m:"우주선"},{w:"rainbow",m:"무지개"},{w:"million",m:"100만"},{w:"model",m:"모델[모형/모범]"},{w:"type",m:"유형, 타자를 치다"},{w:"block",m:"블록[구획], 막다"},{w:"seat",m:"좌석[자리], 앉히다"},{w:"touch",m:"만지다, 감동시키다, 접촉"},{w:"wonder",m:"궁금하다, 경이"},{w:"magic",m:"마술[마법](의)"},{w:"secret",m:"비밀(의)"},{w:"general",m:"일반적인, 육군[공군] 장군"},{w:"prepare",m:"준비하다"},{w:"imagine",m:"상상하다"},{w:"forget",m:"잊다"},{w:"develop",m:"발달하다, 개발하다"},{w:"recycle",m:"재활용하다"},{w:"several",m:"몇몇의"},{w:"funny",m:"웃기는[재미있는]"},{w:"safe",m:"안전한"},{w:"enough",m:"충분한 (수량), 충분히"},{w:"loud",m:"큰 소리의, 큰소리로"},{w:"far",m:"멀리, 훨씬, 먼"}],
+"Day 14":[{w:"truth",m:"진실[사실/진리]"},{w:"success",m:"성공"},{w:"friendship",m:"우정"},{w:"being",m:"존재"},{w:"goods",m:"상품[제품]"},{w:"coin",m:"동전"},{w:"bank",m:"은행, 둑"},{w:"address",m:"주소, 연설"},{w:"electricity",m:"전기"},{w:"law",m:"법(률)"},{w:"campaign",m:"(정치·사회적) 운동[캠페인]"},{w:"sentence",m:"문장"},{w:"heat",m:"열, 더위, 뜨겁게 하다"},{w:"circle",m:"원(을 그리다), 집단"},{w:"reach",m:"이르다[도착하다] 뻗다, 범위"},{w:"mix",m:"섞다[섞이다], 혼합"},{w:"excite",m:"흥분시키다"},{w:"rise",m:"오르다, 떠오르다"},{w:"lead",m:"이끌다[데리고 가다]"},{w:"enter",m:"들어가다, 입학하다"},{w:"fill",m:"(가득) 채우다[차다]"},{w:"produce",m:"생산하다"},{w:"cool",m:"시원한, 식다[식히다]"},{w:"slow",m:"느린, 늦추다"},{w:"clear",m:"명확한, 맑은, 치우다"},{w:"false",m:"틀린[가짜의/거짓된]"},{w:"national",m:"국가[민족]의"},{w:"main",m:"주된[가장 중요한]"},{w:"almost",m:"거의"},{w:"finally",m:"마침내, 마지막으로"}],
+"Day 15":[{w:"library",m:"도서관"},{w:"museum",m:"박물관[미술관]"},{w:"ocean",m:"대양[바다]"},{w:"bone",m:"뼈"},{w:"bath",m:"목욕"},{w:"pity",m:"유감[안된 일], 동정"},{w:"proverb",m:"격언[속담]"},{w:"product",m:"생산물[제품]"},{w:"invention",m:"발명(품)"},{w:"technology",m:"테크놀로지[과학 기술]"},{w:"trash",m:"쓰레기"},{w:"moment",m:"때[순간], 잠시"},{w:"date",m:"날짜, 데이트"},{w:"taste",m:"맛(이 나다), 취향"},{w:"balance",m:"균형(을 잡다)"},{w:"ring",m:"반지, (종[전화]이) 울리다"},{w:"share",m:"공유하다, 나누다, 몫"},{w:"return",m:"(되)돌아가다[오다], 귀환"},{w:"lift",m:"(들어) 올리다, 태우기"},{w:"raise",m:"올리다, 모금하다, 기르다"},{w:"explain",m:"설명하다"},{w:"marry",m:"~와 결혼하다"},{w:"exciting",m:"흥분시키는[흥미진진한]"},{w:"common",m:"흔한, 공통의, 보통의"},{w:"global",m:"세계[지구]의"},{w:"regular",m:"규칙적인, 보통의"},{w:"serious",m:"진지한, 심각한"},{w:"fresh",m:"신선한, 새로운"},{w:"probably",m:"아마"},{w:"else",m:"그 밖의"}],
+"Day 16":[{w:"planet",m:"행성, 지구"},{w:"beauty",m:"아름다움, 미인"},{w:"sight",m:"시력, 봄, 시야, 광경"},{w:"nation",m:"국가, 민족"},{w:"foreigner",m:"외국인"},{w:"band",m:"악단[악대], 밴드[띠]"},{w:"straw",m:"(밀)짚, 빨대"},{w:"storm",m:"폭풍우"},{w:"disease",m:"(질)병"},{w:"purpose",m:"목적"},{w:"display",m:"전시[진열](하다)"},{w:"reply",m:"대답(하다)"},{w:"record",m:"기록(하다), 녹음하다"},{w:"cheer",m:"환호[응원](하다)"},{w:"shake",m:"흔들(리)다, 밀크셰이크"},{w:"key",m:"열쇠, 비결, 핵심적인"},{w:"wild",m:"야생(의)"},{w:"square",m:"정사각형(의), 제곱(의), 광장"},{w:"wake",m:"잠에서 깨다[깨우다]"},{w:"discover",m:"발견하다"},{w:"solve",m:"풀다[해결하다]"},{w:"continue",m:"계속하다"},{w:"burn",m:"(불)타다[태우다]"},{w:"simple",m:"간단한[단순한]"},{w:"quiet",m:"조용한"},{w:"traditional",m:"전통의, 전통적인"},{w:"international",m:"국제의, 국제적인"},{w:"huge",m:"거대한"},{w:"instead",m:"대신에"},{w:"suddenly",m:"갑자기"}],
+"Day 17":[{w:"bridge",m:"(건너는) 다리"},{w:"ghost",m:"유령"},{w:"scene",m:"장면, 현장"},{w:"effort",m:"노력"},{w:"wisdom",m:"지혜"},{w:"fault",m:"잘못, 결점"},{w:"flight",m:"항공편, 비행"},{w:"zoo",m:"동물원"},{w:"candle",m:"(양)초"},{w:"bottom",m:"맨 아래[바닥]"},{w:"mistake",m:"실수(하다)"},{w:"trouble",m:"곤란[곤경], 괴롭히다"},{w:"nap",m:"낮잠(을 자다)"},{w:"blow",m:"불다, 강타[타격]"},{w:"flood",m:"물에 잠기게 하다, 홍수"},{w:"hurry",m:"서두르다, 서두름"},{w:"treat",m:"대하다, 치료하다, 대접하다, 한턱내기"},{w:"express",m:"표현하다, 급행의, 급행열차"},{w:"breathe",m:"숨 쉬다[호흡하다]"},{w:"hate",m:"몹시 싫어하다"},{w:"create",m:"창조[창출]하다"},{w:"divide",m:"나누다[나뉘다]"},{w:"soft",m:"부드러운"},{w:"empty",m:"빈"},{w:"perfect",m:"완벽한[완전한]"},{w:"successful",m:"성공한[성공적인]"},{w:"everyday",m:"매일의[일상의]"},{w:"low",m:"낮은, 낮게"},{w:"alone",m:"혼자, 외로이, 외로운"},{w:"inside",m:"안(쪽)(에)"}],
+"Day 18":[{w:"creature",m:"동물, 생명체"},{w:"army",m:"군대, 육군"},{w:"society",m:"사회"},{w:"fan",m:"팬[~광], 선풍기[부채]"},{w:"wheel",m:"바퀴"},{w:"pair",m:"쌍[벌/켤레]"},{w:"joy",m:"기쁨"},{w:"memory",m:"기억(력), 추억"},{w:"recipe",m:"조리[요리]법"},{w:"kid",m:"아이, 농담하다"},{w:"smoke",m:"연기, 담배를 피우다"},{w:"favor",m:"호의[친절], 부탁, 선호하다"},{w:"trick",m:"속임수, 장난, 속이다"},{w:"experiment",m:"실험(하다)"},{w:"drop",m:"떨어뜨리다, 방울"},{w:"press",m:"누르다, 언론, 인쇄"},{w:"stick",m:"붙(이)다, 찌르다, 내밀다, 스틱"},{w:"roll",m:"구르다, 말다, 두루마리"},{w:"throw",m:"던지다"},{w:"serve",m:"음식을 제공하다, 시중들다"},{w:"improve",m:"개선되다, 향상시키다"},{w:"realize",m:"깨닫다, 실현하다"},{w:"dry",m:"마른[건조한], 말리다"},{w:"complete",m:"완전한, 끝내다"},{w:"lucky",m:"행운의[운 좋은]"},{w:"natural",m:"자연[천연]의, 타고난"},{w:"friendly",m:"친절한, 친한"},{w:"cute",m:"귀여운"},{w:"already",m:"이미[벌써]"},{w:"especially",m:"특히"}],
+"Day 19":[{w:"hometown",m:"고향"},{w:"yard",m:"마당[뜰]"},{w:"grocery",m:"식료품 잡화"},{w:"fairy",m:"요정"},{w:"flag",m:"기[깃발]"},{w:"manner",m:"방식, 태도, 예의"},{w:"noise",m:"시끄러운 소리[소음]"},{w:"pain",m:"고통, 수고"},{w:"danger",m:"위험"},{w:"guide",m:"안내(인), 안내하다"},{w:"coach",m:"코치, 코치[지도]하다"},{w:"note",m:"메모, 필기, 주목하다"},{w:"count",m:"세다, 계산(하다), 셈"},{w:"sail",m:"항해하다, 돛"},{w:"promise",m:"약속(하다)"},{w:"repeat",m:"되풀이하다, 반복(하다)"},{w:"bake",m:"굽다"},{w:"gather",m:"모으다[모이다]"},{w:"succeed",m:"성공하다, 뒤를 잇다"},{w:"protect",m:"보호하다"},{w:"advertise",m:"광고하다"},{w:"disappear",m:"사라지다"},{w:"electric",m:"전기의"},{w:"lovely",m:"아름다운, 즐거운"},{w:"thin",m:"얇은, 마른, 묽은"},{w:"round",m:"둥근, 왕복의, 라운드, 주위에"},{w:"deep",m:"깊은, 깊게"},{w:"wide",m:"넓은, 활짝"},{w:"yet",m:"아직, 벌써, 그렇지만"},{w:"quickly",m:"빨리, 곧"}],
+"Day 20":[{w:"couple",m:"한 쌍, 몇몇, 커플[부부]"},{w:"tourist",m:"관광객"},{w:"gate",m:"(대)문, 탑승구"},{w:"background",m:"배경"},{w:"capital",m:"수도, 대문자, 자본"},{w:"valley",m:"골짜기[계곡]"},{w:"direction",m:"방향, 지시"},{w:"distance",m:"거리"},{w:"behavior",m:"행동"},{w:"dictionary",m:"사전"},{w:"object",m:"물건[물체], 목적, 대상, 반대하다"},{w:"rescue",m:"구조[구출](하다)"},{w:"tear",m:"눈물, 찢(어지)다"},{w:"honor",m:"존경(하다), 영광, 명예"},{w:"increase",m:"증가(하다), 증가시키다"},{w:"bite",m:"물다, 물기"},{w:"male",m:"남성[수컷](의)"},{w:"native",m:"출생지의, 원주민(의)"},{w:"disappoint",m:"실망시키다"},{w:"shine",m:"빛나다"},{w:"fix",m:"고치다, 고정시키다"},{w:"pour",m:"따르다, (퍼)붓다"},{w:"allow",m:"허락[허용]하다"},{w:"prevent",m:"막다[방지/예방하다]"},{w:"certain",m:"확신하는[확실한], 어떤"},{w:"mental",m:"정신[마음]의"},{w:"comfortable",m:"편(안)한"},{w:"expensive",m:"비싼"},{w:"therefore",m:"그러므로"},{w:"everywhere",m:"어디나"}],
+"Day 21":[{w:"action",m:"행동, 조치"},{w:"talent",m:"재능, 재능 있는 사람(들)"},{w:"choice",m:"선택"},{w:"slave",m:"노예"},{w:"situation",m:"상황"},{w:"pride",m:"자랑스러움[자부심]"},{w:"tip",m:"(뾰족한) 끝, 팁, 조언"},{w:"stair",m:"계단"},{w:"soil",m:"흙[토양]"},{w:"master",m:"달인, 주인, 숙달하다"},{w:"suit",m:"정장, ~옷[복], 맞다, 어울리다"},{w:"notice",m:"알아차리다, 주목"},{w:"bow",m:"절(하다), 숙이다, 활, 나비매듭"},{w:"rush",m:"서두르다, 돌진"},{w:"adult",m:"성인(의), 어른(스러운)"},{w:"principal",m:"교장, 장, 주요한"},{w:"folk",m:"사람들, 가족, 민속의"},{w:"material",m:"재료, 자료, 물질의"},{w:"standard",m:"수준[기준], 일반적인"},{w:"surf",m:"파도타기를 하다"},{w:"accept",m:"받아들이다[인정하다]"},{w:"obey",m:"따르다[순종하다]"},{w:"hide",m:"숨기다[숨다]"},{w:"basic",m:"기본[기초]의"},{w:"local",m:"지역[지방]의"},{w:"boring",m:"지루한"},{w:"weak",m:"약한"},{w:"quick",m:"빠른"},{w:"easily",m:"쉽게"},{w:"abroad",m:"외국에[으로]"}],
+"Day 22":[{w:"hero",m:"영웅, 남자 주인공"},{w:"ability",m:"능력"},{w:"knowledge",m:"지식"},{w:"technique",m:"기법[기술]"},{w:"floor",m:"바닥, (건물의) 층"},{w:"cancer",m:"암"},{w:"diet",m:"식사, 다이어트"},{w:"garbage",m:"쓰레기"},{w:"cash",m:"현금"},{w:"countryside",m:"시골"},{w:"route",m:"길[노선]"},{w:"amount",m:"양, 합계 ~이다"},{w:"score",m:"득점[점수], 득점하다"},{w:"challenge",m:"도전(하다)"},{w:"cure",m:"치료제[법], 치료하다"},{w:"appear",m:"나타나다, ~인 것 같다"},{w:"spread",m:"펴다, 퍼지다"},{w:"hunt",m:"사냥하다"},{w:"destroy",m:"파괴하다"},{w:"consider",m:"숙고[고려]하다, 여기다"},{w:"expect",m:"기대[예상]하다"},{w:"suggest",m:"제안하다[권하다]"},{w:"cultural",m:"문화의"},{w:"social",m:"사회의"},{w:"elderly",m:"연세 드신"},{w:"unhappy",m:"불행한"},{w:"crazy",m:"미친, 열광적인, 화난"},{w:"alive",m:"살아 있는"},{w:"outside",m:"밖에[으로], 외부의"},{w:"quite",m:"꽤"}],
+"Day 23":[{w:"host",m:"주인[주최자], 진행자"},{w:"audience",m:"청중[관객], 시청자"},{w:"athlete",m:"운동선수"},{w:"cell",m:"세포"},{w:"wing",m:"날개"},{w:"tail",m:"꼬리"},{w:"bowl",m:"사발[공기]"},{w:"brick",m:"벽돌"},{w:"temperature",m:"온도[기온], 체온"},{w:"transportation",m:"운송, 교통수단"},{w:"site",m:"장소, 현장, 웹사이트"},{w:"decision",m:"결정"},{w:"fiction",m:"소설[허구]"},{w:"frighten",m:"무섭게 하다[겁주다]"},{w:"scare",m:"무섭게 하다[겁주다]"},{w:"slip",m:"미끄러지다"},{w:"melt",m:"녹다[녹이다]"},{w:"pollute",m:"오염시키다"},{w:"affect",m:"영향을 미치다"},{w:"depend",m:"의존하다, 믿다, 달려 있다"},{w:"manage",m:"경영[관리]하다, 해내다"},{w:"fit",m:"맞다[맞추다], 건강한"},{w:"correct",m:"맞는, 바로잡다"},{w:"surprising",m:"놀라운"},{w:"active",m:"활동적인, 적극적인"},{w:"colorful",m:"다채로운[화려한]"},{w:"wet",m:"젖은, 비 오는"},{w:"lively",m:"활기찬[활발한]"},{w:"daily",m:"매일[일상]의, 매일"},{w:"straight",m:"똑바로[곧장], 곧은[똑바른]"}],
+"Day 24":[{w:"god",m:"신[조물주]"},{w:"guest",m:"손님"},{w:"diver",m:"잠수부"},{w:"blood",m:"피[혈액]"},{w:"pool",m:"수영장, 웅덩이"},{w:"temple",m:"사원[절]"},{w:"thought",m:"생각[사고]"},{w:"crop",m:"농작물, 수확량"},{w:"sheet",m:"(침대) 시트, 한 장"},{w:"quarter",m:"4분의 1"},{w:"crowd",m:"군중, 꽉 채우다"},{w:"care",m:"돌봄, 관심을 갖다"},{w:"strike",m:"치다[부딪치다], 치기"},{w:"relative",m:"친척, 상대적인"},{w:"patient",m:"환자, 참을성 있는"},{w:"gain",m:"얻다, 늘다"},{w:"provide",m:"제공[공급]하다"},{w:"dig",m:"파다[캐다]"},{w:"explore",m:"탐사[탐험/탐구]하다"},{w:"warn",m:"경고하다"},{w:"recognize",m:"알아보다"},{w:"celebrate",m:"축하[기념]하다"},{w:"stupid",m:"어리석은[멍청한]"},{w:"helpful",m:"도움이 되는"},{w:"convenient",m:"편리한"},{w:"impossible",m:"불가능한"},{w:"medical",m:"의학[의료]의"},{w:"outdoor",m:"야외의"},{w:"forever",m:"영원히"},{w:"indeed",m:"정말"}],
+"Day 25":[{w:"wood",m:"나무[목재], 숲"},{w:"cave",m:"동굴"},{w:"tomb",m:"무덤"},{w:"tool",m:"도구[연장]"},{w:"satellite",m:"(인공)위성"},{w:"communication",m:"의사소통, 통신"},{w:"wealth",m:"부[재산]"},{w:"attention",m:"주의[주목]"},{w:"miracle",m:"기적"},{w:"stream",m:"개울[시내], 흐름, 계속 흐르다"},{w:"wave",m:"파도[물결], 흔들다"},{w:"value",m:"가치, 소중히 여기다"},{w:"beat",m:"이기다, 계속 때리다, 박동, 박자"},{w:"support",m:"지지(하다), 부양하다"},{w:"twin",m:"쌍둥이 (중의 한 명), 쌍둥이의"},{w:"chemical",m:"화학 물질, 화학의"},{w:"female",m:"여성[암컷](의)"},{w:"fair",m:"공정한[공평한], 박람회"},{w:"respond",m:"반응하다, 대답하다"},{w:"deliver",m:"배달하다"},{w:"fold",m:"접다"},{w:"include",m:"포함하다"},{w:"earn",m:"(돈을) 벌다"},{w:"bet",m:"돈을 걸다"},{w:"calm",m:"침착한, 평온, 진정하다"},{w:"direct",m:"직접(의), 지휘하다"},{w:"thick",m:"두꺼운, 짙은, 진한"},{w:"abstract",m:"추상적인"},{w:"someday",m:"(미래) 언젠가"},{w:"nowadays",m:"요즘에는"}],
+"Day 26":[{w:"lawyer",m:"변호사"},{w:"officer",m:"장교, 관리, 경찰관"},{w:"university",m:"대학"},{w:"level",m:"수준, 높이"},{w:"growth",m:"성장, 증가"},{w:"journey",m:"여행"},{w:"gun",m:"총, 대포"},{w:"emergency",m:"비상[응급]"},{w:"case",m:"경우, 사건, 케이스[용기]"},{w:"difficulty",m:"어려움, 곤경"},{w:"addition",m:"더하기"},{w:"credit",m:"신용 거래"},{w:"fool",m:"바보, 속이다"},{w:"harvest",m:"수확(량), 수확하다"},{w:"figure",m:"수치, 인물, 도표, 이해하다"},{w:"tie",m:"묶다, 동점(이 되다), 넥타이"},{w:"boil",m:"끓다[끓이다], 삶다"},{w:"borrow",m:"빌리다"},{w:"belong",m:"~에 속하다, ~ 소유이다"},{w:"communicate",m:"(의사)소통하다, 연락하다"},{w:"confuse",m:"혼란시키다, 혼동하다"},{w:"survive",m:"살아남다, ~보다 오래 살다"},{w:"handsome",m:"잘생긴"},{w:"gentle",m:"온화한"},{w:"mad",m:"화난, 열광적인, 미친"},{w:"merry",m:"즐거운[명랑한]"},{w:"noisy",m:"시끄러운"},{w:"scientific",m:"과학의, 과학적인"},{w:"mostly",m:"주로"},{w:"anywhere",m:"어디든, 아무데(서)도, 어딘가"}],
+"Day 27":[{w:"captain",m:"선장[기장], (팀의) 주장"},{w:"stranger",m:"낯선 사람, 처음인 사람"},{w:"statue",m:"조각상"},{w:"spirit",m:"정신[영혼], 기분[기백]"},{w:"scenery",m:"경치[풍경]"},{w:"gesture",m:"제스처[몸짓]"},{w:"pole",m:"막대기, 극"},{w:"rubber",m:"고무"},{w:"structure",m:"구조, 구조[건축]물"},{w:"root",m:"뿌리, 응원하다"},{w:"schedule",m:"일정[시간표], 예정이다"},{w:"tour",m:"여행, 관광[순회](하다)"},{w:"charge",m:"요금, 외상, 책임, 청구하다"},{w:"decrease",m:"줄(이)다, 감소(하다)"},{w:"review",m:"복습하다, 검토, 논평"},{w:"vote",m:"투표(하다)"},{w:"attend",m:"참석하다, 다니다"},{w:"discuss",m:"토론[논의]하다"},{w:"settle",m:"해결하다, 정착하다"},{w:"elect",m:"(선거로) 선출하다"},{w:"achieve",m:"이루다[성취하다]"},{w:"appreciate",m:"감사하다, 진가를 알아보다"},{w:"brave",m:"용감한"},{w:"cheap",m:"싼"},{w:"classical",m:"고전의, 고전적인"},{w:"familiar",m:"잘 아는, 친숙한"},{w:"unknown",m:"알려지지 않은"},{w:"uncomfortable",m:"불편한"},{w:"simply",m:"그저[단지], 간단히"},{w:"anyway",m:"어쨌든"}],
+"Day 28":[{w:"population",m:"인구"},{w:"coast",m:"해안"},{w:"bucket",m:"양동이"},{w:"cart",m:"마차, 카트[손수레]"},{w:"cage",m:"새장[우리]"},{w:"screen",m:"화면[스크린]"},{w:"kite",m:"연"},{w:"autumn",m:"가을"},{w:"breeze",m:"산들바람[미풍]"},{w:"mess",m:"엉망"},{w:"litter",m:"쓰레기"},{w:"joke",m:"농담(하다)"},{w:"hike",m:"도보 여행(을 하다)"},{w:"fear",m:"두려움, 두려워하다"},{w:"offer",m:"제의[제공](하다)"},{w:"remain",m:"계속 ~이다, 남다, 나머지, 유적"},{w:"repair",m:"고치다, 수리(하다)"},{w:"blank",m:"빈칸, 빈"},{w:"final",m:"마지막의, 결승전"},{w:"public",m:"대중[공공]의, 대중"},{w:"bend",m:"구부리다"},{w:"float",m:"뜨다[띄우다], 떠다니다"},{w:"bark",m:"짖다"},{w:"concentrate",m:"집중하다"},{w:"dead",m:"죽은"},{w:"personal",m:"개인의[개인적인]"},{w:"historic",m:"역사상 중요한[역사적인]"},{w:"western",m:"서쪽의, 서양의"},{w:"ahead",m:"앞에[으로]"},{w:"exactly",m:"정확히"}],
+"Day 29":[{w:"government",m:"정부"},{w:"stomach",m:"위, 배[복부]"},{w:"flour",m:"곡물 가루"},{w:"doll",m:"인형"},{w:"cyberspace",m:"사이버 공간"},{w:"strength",m:"힘, 강점"},{w:"will",m:"의지[뜻], 유언장"},{w:"development",m:"발달, 개발"},{w:"engineering",m:"공학"},{w:"edge",m:"끝[가장자리], 날"},{w:"pattern",m:"양식, 무늬"},{w:"alarm",m:"경보(기), 자명종"},{w:"dot",m:"점(을 찍다)"},{w:"cost",m:"비용(이 ~이다[들다])"},{w:"focus",m:"초점(을 맞추다), 집중하다"},{w:"shock",m:"충격(을 주다)"},{w:"reward",m:"보상(하다), 보상금"},{w:"impress",m:"감명을 주다"},{w:"replace",m:"대신하다, 교체하다"},{w:"fail",m:"실패하다, 낙제하다"},{w:"skip",m:"건너뛰다[빼먹다], 깡충깡충 뛰다"},{w:"necessary",m:"필요한"},{w:"elementary",m:"기본의, 초등학교의"},{w:"fantastic",m:"환상적인"},{w:"tasty",m:"맛있는"},{w:"flat",m:"평평한, 바람이 빠진"},{w:"tough",m:"힘든, 강인한, 질긴"},{w:"crowded",m:"붐비는"},{w:"forward",m:"앞으로"},{w:"badly",m:"잘못[안 좋게], 몹시"}],
+"Day 30":[{w:"climate",m:"기후"},{w:"degree",m:"도, 정도, 학위"},{w:"article",m:"기사, 물품"},{w:"metal",m:"금속"},{w:"monster",m:"괴물"},{w:"treasure",m:"보물"},{w:"symbol",m:"상징"},{w:"ceremony",m:"의식(儀式)"},{w:"congratulation",m:"축하"},{w:"breath",m:"숨[호흡]"},{w:"death",m:"죽음"},{w:"headache",m:"두통"},{w:"muscle",m:"근육"},{w:"base",m:"기초, 기반[근거지], ~에 근거를 두다"},{w:"lock",m:"잠그다, 자물쇠"},{w:"dislike",m:"싫어하다, 싫어함"},{w:"feed",m:"먹을 것을 주다"},{w:"lend",m:"빌려 주다"},{w:"suffer",m:"(고통을) 겪다"},{w:"hang",m:"걸(리)다, 목을 매달다"},{w:"wrap",m:"싸다[포장하다]"},{w:"pleasant",m:"쾌적한[즐거운]"},{w:"lonely",m:"외로운"},{w:"thirsty",m:"목마른"},{w:"polite",m:"예의 바른[공손한]"},{w:"rude",m:"무례한"},{w:"excellent",m:"뛰어난[탁월한]"},{w:"overweight",m:"과체중의, 중량 초과의"},{w:"perhaps",m:"아마도"},{w:"twice",m:"두 번, 두 배로"}],
+"Day 31":[{w:"heaven",m:"천국"},{w:"myth",m:"신화"},{w:"sand",m:"모래, 모래사장"},{w:"castle",m:"성(城)"},{w:"kindness",m:"친절"},{w:"concentration",m:"집중(력)"},{w:"mystery",m:"수수께끼, 신비[불가사의]"},{w:"battle",m:"전투"},{w:"industry",m:"산업[공업], 근면"},{w:"pile",m:"더미, 쌓아 올리다"},{w:"chat",m:"담소[수다], 채팅하다"},{w:"puzzle",m:"퍼즐, 어리둥절하게 하다"},{w:"text",m:"문자(를 보내다), 글, 교재"},{w:"advance",m:"진보, 진전(되다), 전진"},{w:"graduate",m:"졸업하다, 졸업자"},{w:"predict",m:"예측[예견]하다"},{w:"compare",m:"비교하다"},{w:"complain",m:"불평[항의]하다"},{w:"forgive",m:"용서하다"},{w:"determine",m:"결정하다, 알아내다"},{w:"exist",m:"존재하다"},{w:"dive",m:"다이빙하다, 잠수하다"},{w:"upper",m:"위쪽의"},{w:"central",m:"중심[중앙]의"},{w:"normal",m:"정상[보통]의"},{w:"similar",m:"비슷한"},{w:"honest",m:"정직한"},{w:"ashamed",m:"부끄러워하는"},{w:"anymore",m:"더 이상"},{w:"besides",m:"게다가, ~ 외에"}],
+"Day 32":[{w:"generation",m:"세대"},{w:"self",m:"자신[자아]"},{w:"visitor",m:"방문객"},{w:"boss",m:"상사[상관]"},{w:"portrait",m:"초상화"},{w:"darkness",m:"어둠"},{w:"earthquake",m:"지진"},{w:"weapon",m:"무기"},{w:"charity",m:"자선 (단체)"},{w:"saying",m:"속담[격언]"},{w:"issue",m:"쟁점[문제], 호, 발표[발행]하다"},{w:"signal",m:"신호(를 보내다)"},{w:"exchange",m:"교환(하다)"},{w:"swallow",m:"삼키다, 제비"},{w:"average",m:"평균(의)"},{w:"official",m:"공식의, 관리[임원]"},{w:"gray",m:"회색(의), 반백의"},{w:"prefer",m:"더 좋아하다[선호하다]"},{w:"relax",m:"쉬다[긴장을 풀다]"},{w:"reduce",m:"줄(이)다"},{w:"bury",m:"묻다[매장하다]"},{w:"shoot",m:"쏘다, 촬영하다, 슛하다"},{w:"yell",m:"외치다[소리치다]"},{w:"powerful",m:"강력한"},{w:"faithful",m:"충실한[믿음직한]"},{w:"creative",m:"창조적인"},{w:"deaf",m:"청각 장애가 있는"},{w:"electronic",m:"전자의"},{w:"nearly",m:"거의"},{w:"happily",m:"행복하게, 다행히"}],
+"Day 33":[{w:"ancestor",m:"조상[선조]"},{w:"director",m:"감독, 책임자, 임원"},{w:"customer",m:"고객"},{w:"astronaut",m:"우주 비행사"},{w:"dynasty",m:"왕조"},{w:"furniture",m:"가구"},{w:"drug",m:"약"},{w:"greenhouse",m:"온실"},{w:"harmony",m:"조화"},{w:"dirt",m:"먼지, 때, 흙"},{w:"shot",m:"발사, 슛, 주사"},{w:"curve",m:"곡선(을 이루다)"},{w:"stuff",m:"것(들), 채우다"},{w:"pack",m:"(짐을) 싸다, 꾸러미"},{w:"spill",m:"엎지르다, 유출"},{w:"debate",m:"토론[논의](하다)"},{w:"whisper",m:"속삭이다, 속삭임"},{w:"lay",m:"놓다, 눕히다, 낳다"},{w:"pardon",m:"용서하다, 뭐라고요?"},{w:"beg",m:"간청하다, 구걸하다"},{w:"relate",m:"관련시키다"},{w:"intelligent",m:"총명한[똑똑한]"},{w:"eager",m:"열망하는"},{w:"disabled",m:"장애가 있는"},{w:"homeless",m:"집 없는"},{w:"harmful",m:"해로운"},{w:"lifelong",m:"평생의"},{w:"nervous",m:"초조한, 신경의"},{w:"seldom",m:"좀처럼[거의] ~ 않는"},{w:"somewhere",m:"어딘가에[로]"}],
+"Day 34":[{w:"birth",m:"출생"},{w:"childhood",m:"어린 시절"},{w:"education",m:"교육"},{w:"emotion",m:"감정"},{w:"attitude",m:"태도[자세]"},{w:"courage",m:"용기"},{w:"condition",m:"상태, 환경, 조건"},{w:"fever",m:"열(병)"},{w:"conversation",m:"대화"},{w:"adventure",m:"모험"},{w:"triangle",m:"삼각형, 트라이앵글"},{w:"bulb",m:"전구, 알뿌리[구근]"},{w:"attack",m:"공격(하다), 발작"},{w:"cough",m:"기침(하다)"},{w:"flow",m:"흐르다, 흐름"},{w:"search",m:"찾다, 수색[검색](하다)"},{w:"original",m:"원래의, 독창적인, 원작"},{w:"opposite",m:"(정)반대(의), 맞은편의, 맞은편에"},{w:"jog",m:"조깅하다"},{w:"scan",m:"살피다, (대충) 훑어보다"},{w:"describe",m:"묘사[기술]하다"},{w:"freeze",m:"얼(리)다"},{w:"remove",m:"제거하다[없애다]"},{w:"single",m:"단 하나의, 독신의, 1인용의"},{w:"positive",m:"긍정적인"},{w:"ugly",m:"못생긴[추한]"},{w:"northern",m:"북쪽의"},{w:"nearby",m:"가까운, 가까이에(서)"},{w:"upside down",m:"거꾸로 (된), 뒤집혀"},{w:"downtown",m:"시내에[로], 시내의"}],
+"Day 35":[{w:"thief",m:"도둑"},{w:"lifetime",m:"일생[평생]"},{w:"career",m:"직업, 경력"},{w:"economy",m:"경제"},{w:"fur",m:"모피, (동물의) 털"},{w:"engine",m:"엔진, 기관차"},{w:"poetry",m:"(집합적) 시"},{w:"border",m:"국경[경계]"},{w:"disaster",m:"재난[재해]"},{w:"filter",m:"필터[여과 장치], 여과하다[거르다]"},{w:"forecast",m:"예보(하다)"},{w:"quarrel",m:"(말)다툼, 다투다"},{w:"harm",m:"피해[손해], 해치다"},{w:"regard",m:"안부 인사, 여기다"},{w:"sneeze",m:"재채기(를 하다)"},{w:"sink",m:"가라앉다, 싱크대"},{w:"characteristic",m:"특징, 특유의"},{w:"professional",m:"직업의, 전문적인, 전문가"},{w:"encourage",m:"용기를 북돋우다[격려하다]"},{w:"reflect",m:"비추다, 반사[반영]하다"},{w:"slide",m:"미끄러지다"},{w:"stretch",m:"늘리다, 당기다, 뻗다"},{w:"steal",m:"훔치다"},{w:"comic",m:"희극의, 웃기는"},{w:"anxious",m:"걱정하는, 열망하는"},{w:"asleep",m:"잠든"},{w:"effective",m:"효과적인"},{w:"due",m:"~ 때문인, 예정인, 지불 기한이 된"},{w:"actually",m:"실제로"},{w:"rather",m:"꽤, 약간[좀], 오히려"}],
+"Day 36":[{w:"manager",m:"경영[관리]자, 매니저"},{w:"shore",m:"물가[해안/호숫가]"},{w:"sunrise",m:"해돋이[일출]"},{w:"lighting",m:"조명"},{w:"wire",m:"철사, (전)선"},{w:"stage",m:"단계, 무대"},{w:"zone",m:"지역[구역]"},{w:"height",m:"높이, 키[신장]"},{w:"prediction",m:"예측[예견]"},{w:"marriage",m:"결혼"},{w:"period",m:"기간[시기], 마침표"},{w:"claim",m:"주장(하다), 청구"},{w:"deal",m:"거래(하다), 다루다"},{w:"limit",m:"한계, 제한(하다)"},{w:"tap",m:"톡톡 두드리다, (수도)꼭지"},{w:"spray",m:"뿌리다[뿌려지다], 물보라, 분무기"},{w:"weigh",m:"무게가 ~이다"},{w:"pray",m:"기도[기원]하다"},{w:"greet",m:"인사하다"},{w:"chew",m:"씹다"},{w:"attract",m:"(마음을) 끌다"},{w:"overcome",m:"극복하다"},{w:"salty",m:"짠"},{w:"southern",m:"남쪽의"},{w:"curious",m:"호기심이 많은, 궁금한"},{w:"humorous",m:"유머러스한, 재미있는"},{w:"foolish",m:"어리석은"},{w:"greedy",m:"탐욕스러운"},{w:"valuable",m:"귀중한[값비싼]"},{w:"certainly",m:"확실히, 물론"}],
+"Day 37":[{w:"agent",m:"에이전트[대리인[점]/중개인]"},{w:"politics",m:"정치"},{w:"reality",m:"현실"},{w:"relationship",m:"관계"},{w:"role",m:"역할"},{w:"theater",m:"극장, 연극"},{w:"performance",m:"공연[연주], 수행"},{w:"reservation",m:"예약"},{w:"sightseeing",m:"관광"},{w:"path",m:"(좁은) 길"},{w:"source",m:"원천, 근원, 출처"},{w:"proof",m:"증거"},{w:"term",m:"기간[기한], 용어"},{w:"net",m:"인터넷, 그물"},{w:"cast",m:"깁스, 배역진, 던지다, 배역하다"},{w:"trust",m:"신뢰(하다)"},{w:"crash",m:"충돌하다, 충돌 사고"},{w:"hatch",m:"부화하다, (배·비행기) 해치"},{w:"clap",m:"박수[손뼉]를 치다"},{w:"announce",m:"발표하다"},{w:"represent",m:"나타내다, 대표하다"},{w:"devote",m:"바치다"},{w:"peaceful",m:"평화로운"},{w:"painful",m:"아픈[고통스러운]"},{w:"sharp",m:"날카로운"},{w:"responsible",m:"책임 있는, 원인이 되는"},{w:"lazy",m:"게으른"},{w:"likely",m:"~할[일] 것 같은"},{w:"completely",m:"완전히"},{w:"immediately",m:"즉시"}],
+"Day 38":[{w:"architect",m:"건축가"},{w:"narrator",m:"내레이터[해설자]"},{w:"enemy",m:"적"},{w:"throat",m:"목(구멍)"},{w:"illness",m:"병"},{w:"weed",m:"잡초"},{w:"humor",m:"유머"},{w:"volcano",m:"화산"},{w:"kingdom",m:"왕국, ~계"},{w:"attempt",m:"시도(하다)"},{w:"award",m:"상, 수여하다"},{w:"broadcast",m:"방송(하다)"},{w:"aid",m:"원조[도움], 돕다"},{w:"nod",m:"끄덕이다, 끄덕임"},{w:"escape",m:"달아나다, 탈출(하다)"},{w:"envy",m:"부러워하다, 부러움"},{w:"measure",m:"재다[측정하다], 조치"},{w:"chief",m:"장[추장], 주된"},{w:"total",m:"총[전체의], 총계[합계]"},{w:"worth",m:"가치(가 있는)"},{w:"embarrass",m:"당황하게 하다"},{w:"erupt",m:"분출[폭발]하다"},{w:"perform",m:"공연하다, 수행하다"},{w:"publish",m:"출판[발행]하다"},{w:"silent",m:"침묵하는, 조용한"},{w:"silly",m:"어리석은"},{w:"scary",m:"무서운"},{w:"sore",m:"아픈[쑤시는]"},{w:"bitter",m:"쓴, 쓰라린"},{w:"lately",m:"최근에"}],
+"Day 39":[{w:"landscape",m:"풍경(화)"},{w:"construction",m:"건설[공사]"},{w:"mood",m:"기분, 분위기"},{w:"excitement",m:"흥분"},{w:"complaint",m:"불평[항의]"},{w:"confidence",m:"신뢰, 자신(감)"},{w:"invasion",m:"침략, 침해"},{w:"container",m:"용기[그릇], 컨테이너"},{w:"ash",m:"재"},{w:"bar",m:"막대, 술집"},{w:"contact",m:"연락[접촉], 연락하다"},{w:"benefit",m:"혜택[이득], 이득을 주다"},{w:"damage",m:"손상(시키다), 피해"},{w:"supply",m:"공급(량), 공급하다"},{w:"demand",m:"요구(하다), 수요"},{w:"lack",m:"부족(하다), 결핍"},{w:"conflict",m:"갈등[충돌], 상충하다"},{w:"spin",m:"돌(리)다"},{w:"scratch",m:"긁다[할퀴다]"},{w:"suppose",m:"생각하다, 가정하다"},{w:"refer",m:"언급하다, 가리키다, 참고하다"},{w:"ruin",m:"망치다"},{w:"rid",m:"없애다[제거하다]"},{w:"tight",m:"꽉 끼는, 단단한"},{w:"brilliant",m:"눈부신, 뛰어난, 멋진"},{w:"specific",m:"특정한, 구체적인"},{w:"unusual",m:"특이한"},{w:"negative",m:"부정적인"},{w:"royal",m:"왕의"},{w:"partly",m:"부분적으로"}],
+"Day 40":[{w:"happiness",m:"행복"},{w:"freedom",m:"자유"},{w:"independence",m:"독립"},{w:"imagination",m:"상상(력)"},{w:"importance",m:"중요(성)"},{w:"speech",m:"연설"},{w:"silence",m:"침묵"},{w:"invitation",m:"초대"},{w:"exhibition",m:"전시(회)"},{w:"sculpture",m:"조각(품)"},{w:"region",m:"지역"},{w:"position",m:"위치, 자세, 지위"},{w:"research",m:"연구(하다)"},{w:"aim",m:"목표(하다), 겨누다"},{w:"moral",m:"도덕의, 교훈"},{w:"extra",m:"추가의, 엑스트라"},{w:"arrange",m:"준비하다, 배열하다"},{w:"advise",m:"조언[충고]하다"},{w:"recommend",m:"추천하다, 권고하다"},{w:"declare",m:"선언하다, 신고하다"},{w:"prove",m:"증명하다, 판명되다"},{w:"injure",m:"다치게 하다"},{w:"connect",m:"연결[접속]하다"},{w:"hug",m:"껴안다[포옹하다]"},{w:"foggy",m:"안개가 낀"},{w:"neat",m:"깔끔한"},{w:"loose",m:"풀린, 헐렁한"},{w:"endangered",m:"(멸종) 위기에 처한"},{w:"bound",m:"꼭 ~할 것 같은, ~행의"},{w:"recently",m:"최근에"}],
+"Day 41":[{w:"merchant",m:"상인"},{w:"heritage",m:"유산"},{w:"organization",m:"조직[단체/기구]"},{w:"kindergarten",m:"유치원"},{w:"management",m:"경영[관리]"},{w:"operation",m:"수술, 작전"},{w:"mission",m:"임무"},{w:"means",m:"수단[방법]"},{w:"payment",m:"지불(금)"},{w:"merit",m:"장점[가치]"},{w:"mirror",m:"거울"},{w:"ladder",m:"사다리"},{w:"ingredient",m:"(요리의) 재료, 요소"},{w:"index",m:"색인, 지수[지표]"},{w:"behave",m:"행동하다"},{w:"compete",m:"경쟁하다"},{w:"argue",m:"다투다, 주장하다"},{w:"release",m:"풀어 주다, 방출하다, 공개하다"},{w:"pretend",m:"~인 척하다"},{w:"conclude",m:"결론을 내리다"},{w:"observe",m:"관찰하다, 준수하다"},{w:"spicy",m:"매운"},{w:"terrific",m:"멋진[훌륭한], 엄청난"},{w:"steady",m:"꾸준한"},{w:"various",m:"여러 가지의[다양한]"},{w:"unique",m:"유일한[독특한]"},{w:"unnecessary",m:"불필요한"},{w:"ill",m:"병든[아픈], 나쁜"},{w:"underground",m:"지하의, 지하에[로]"},{w:"sincerely",m:"진심으로"}],
+"Day 42":[{w:"peer",m:"또래"},{w:"pressure",m:"압력"},{w:"loss",m:"손실[분실/상실], 감소"},{w:"playground",m:"운동장[놀이터]"},{w:"pond",m:"연못"},{w:"harbor",m:"항구"},{w:"frame",m:"틀"},{w:"hammer",m:"망치"},{w:"expression",m:"표현, 표정"},{w:"quality",m:"질"},{w:"movement",m:"움직임, 운동"},{w:"package",m:"소포[꾸러미], 포장하다"},{w:"survey",m:"조사(하다)"},{w:"panic",m:"극심한 공포, 공황 (상태에 빠지다)"},{w:"sigh",m:"한숨(을 쉬다)"},{w:"rinse",m:"씻어내다[헹구다]"},{w:"appeal",m:"호소(하다)"},{w:"sweep",m:"쓸다[청소하다], 휩쓸다"},{w:"consist",m:"이루어져 있다"},{w:"unify",m:"통일[통합]하다"},{w:"depress",m:"우울하게 하다"},{w:"blame",m:"탓하다"},{w:"smooth",m:"매끄러운[부드러운]"},{w:"wooden",m:"나무로 된"},{w:"helpless",m:"무력한[속수무책의]"},{w:"incredible",m:"믿을 수 없는"},{w:"available",m:"이용할[구할] 수 있는"},{w:"ancient",m:"고대[옛날]의"},{w:"recent",m:"최근의"},{w:"thus",m:"따라서[그러므로]"}],
+"Day 43":[{w:"wildlife",m:"야생 생물"},{w:"sunset",m:"해넘이[일몰]"},{w:"horizon",m:"수평선[지평선]"},{w:"steam",m:"증기"},{w:"warmth",m:"따뜻함"},{w:"statement",m:"성명, 진술"},{w:"response",m:"반응, 대답"},{w:"task",m:"과업[과제]"},{w:"security",m:"보안[안보]"},{w:"needle",m:"바늘"},{w:"branch",m:"나뭇가지, 지사[지점]"},{w:"thread",m:"실, (실을) 꿰다"},{w:"row",m:"줄[열], 배[노]를 젓다"},{w:"yawn",m:"하품(하다)"},{w:"rub",m:"문지르다"},{w:"wipe",m:"닦다"},{w:"operate",m:"작동하다, 수술하다"},{w:"contain",m:"포함[함유]하다"},{w:"preserve",m:"보존[보호]하다"},{w:"refuse",m:"거절[거부]하다"},{w:"remind",m:"상기시키다"},{w:"bother",m:"괴롭히다, 신경 쓰다"},{w:"tiny",m:"아주 작은"},{w:"curly",m:"곱슬곱슬한"},{w:"rapid",m:"빠른"},{w:"shy",m:"수줍어하는"},{w:"eastern",m:"동쪽의"},{w:"violent",m:"폭력적인"},{w:"worldwide",m:"전 세계적인"},{w:"highly",m:"대단히, 고도로"}],
+"Day 44":[{w:"dinosaur",m:"공룡"},{w:"ruler",m:"지배자, 자"},{w:"admiral",m:"해군 장군[제독]"},{w:"liberty",m:"자유"},{w:"tragedy",m:"비극"},{w:"trial",m:"재판, 시험[실험]"},{w:"treatment",m:"치료"},{w:"shelter",m:"주거지, 피신처"},{w:"orphanage",m:"고아원"},{w:"item",m:"항목[품목]"},{w:"gravity",m:"중력"},{w:"clue",m:"실마리[단서], 힌트"},{w:"range",m:"범위"},{w:"rumor",m:"소문"},{w:"vehicle",m:"탈것[차량]"},{w:"sew",m:"바느질하다[꿰매다]"},{w:"associate",m:"연상하다[연관시키다]"},{w:"identify",m:"(신원을) 확인하다"},{w:"mention",m:"언급하다"},{w:"establish",m:"설립[확립]하다"},{w:"unite",m:"연합[통합]하다"},{w:"frustrate",m:"좌절시키다"},{w:"stuck",m:"움직일 수 없는[갇힌]"},{w:"cheerful",m:"쾌활한[유쾌한]"},{w:"careless",m:"부주의한"},{w:"dull",m:"지루한, 둔한"},{w:"disgusting",m:"역겨운"},{w:"willing",m:"기꺼이 하는"},{w:"golden",m:"금(빛)의, 귀중한"},{w:"apart",m:"떨어져"}],
+"Day 45":[{w:"lung",m:"폐[허파]"},{w:"passport",m:"여권"},{w:"photo",m:"사진"},{w:"envelope",m:"봉투"},{w:"attendant",m:"안내원[수행원]"},{w:"appointment",m:"(만날) 약속, 임명[지명]"},{w:"midnight",m:"자정"},{w:"personality",m:"성격, 개성"},{w:"chimney",m:"굴뚝"},{w:"fence",m:"울타리"},{w:"evidence",m:"증거"},{w:"feature",m:"특징"},{w:"flavor",m:"맛(을 내다)"},{w:"leap",m:"뛰어오르다, 도약"},{w:"leak",m:"새다, 누출"},{w:"scream",m:"비명을 지르다"},{w:"refresh",m:"생기를 되찾게 하다"},{w:"occur",m:"일어나다[발생하다]"},{w:"obtain",m:"얻다"},{w:"intend",m:"의도[작정]하다"},{w:"lower",m:"낮추다, 아래의"},{w:"lean",m:"기울다, 기대다, 호리호리한"},{w:"equal",m:"동일[동등]한, 같다"},{w:"separate",m:"분리된, 분리되다"},{w:"spare",m:"여분의, 여가의, 할애하다"},{w:"hard-working",m:"열심히 일하는[근면한]"},{w:"hopeless",m:"가망 없는[절망적인]"},{w:"raw",m:"날것의"},{w:"portable",m:"휴대용의"},{w:"rarely",m:"드물게[좀처럼 ~ 않는]"}],
+"Day 46":[{w:"passenger",m:"승객"},{w:"continent",m:"대륙"},{w:"port",m:"항구 (도시)"},{w:"cooperation",m:"협력[협동]"},{w:"competition",m:"경쟁, 대회[시합]"},{w:"convenience",m:"편리[편의]"},{w:"curiosity",m:"호기심"},{w:"suicide",m:"자살"},{w:"bullet",m:"총알"},{w:"descendant",m:"자손[후손]"},{w:"collection",m:"수집(품)"},{w:"desire",m:"욕구[욕망], 바라다"},{w:"export",m:"수출(품), 수출하다"},{w:"blend",m:"섞(이)다, 혼합물"},{w:"stare",m:"빤히 보다[응시하다]"},{w:"deceive",m:"속이다"},{w:"commit",m:"(나쁜 일을) 저지르다"},{w:"twist",m:"비틀다[구부리다]"},{w:"decorate",m:"꾸미다[장식하다]"},{w:"tend",m:"경향이 있다[~하기 쉽다]"},{w:"firm",m:"회사, 단단한[딱딱한]"},{w:"senior",m:"연상, 어르신, 졸업반 학생, 상급의"},{w:"major",m:"주요한, 전공(하다)"},{w:"minor",m:"작은, 미성년자, 부전공"},{w:"individual",m:"개인(의), 개개의"},{w:"current",m:"현재의, 흐름[조류/기류/전류]"},{w:"grand",m:"웅장한"},{w:"odd",m:"이상한, 홀수의"},{w:"awkward",m:"어색한"},{w:"directly",m:"직접, 똑바로"}],
+"Day 47":[{w:"novel",m:"소설"},{w:"grave",m:"무덤"},{w:"crime",m:"범죄"},{w:"prison",m:"감옥[교도소]"},{w:"blanket",m:"담요"},{w:"skin",m:"피부"},{w:"instance",m:"사례"},{w:"element",m:"요소[성분]"},{w:"dozen",m:"다스[12개]"},{w:"honesty",m:"정직"},{w:"duty",m:"의무, 세금"},{w:"failure",m:"실패"},{w:"rate",m:"(비)율, 요금, 속도"},{w:"progress",m:"진보[진전/진행](하다)"},{w:"trade",m:"거래[무역](하다)"},{w:"doubt",m:"의심(하다), 의문이다"},{w:"march",m:"행진(하다)"},{w:"delay",m:"미루다, 지연(시키다)"},{w:"satisfy",m:"만족시키다"},{w:"misunderstand",m:"오해하다"},{w:"scold",m:"꾸짖다"},{w:"apply",m:"지원하다, 적용하다"},{w:"drown",m:"익사하다[익사시키다]"},{w:"broad",m:"넓은"},{w:"cruel",m:"잔인한"},{w:"private",m:"사적인"},{w:"urgent",m:"긴급한"},{w:"military",m:"군사의"},{w:"historical",m:"역사(학)의"},{w:"fully",m:"완전히[충분히]"}],
+"Day 48":[{w:"universe",m:"우주"},{w:"laughter",m:"웃음(소리)"},{w:"knee",m:"무릎"},{w:"gym",m:"체육관"},{w:"equipment",m:"장비"},{w:"rope",m:"로프[밧줄]"},{w:"refrigerator",m:"냉장고"},{w:"production",m:"생산"},{w:"tradition",m:"전통"},{w:"religion",m:"종교"},{w:"semester",m:"학기"},{w:"shadow",m:"그림자[그늘]"},{w:"flea",m:"벼룩"},{w:"plug",m:"플러그, 마개, 막다"},{w:"ache",m:"아프다, 아픔[통증]"},{w:"handle",m:"다루다[처리하다], 손잡이"},{w:"pause",m:"잠시 멈추다, 멈춤"},{w:"admire",m:"존경하다, 감탄하다"},{w:"apologize",m:"사과하다"},{w:"threaten",m:"위협[협박]하다"},{w:"arrest",m:"체포하다"},{w:"select",m:"선발[선정/선택]하다"},{w:"narrow",m:"좁은"},{w:"attractive",m:"매력적인"},{w:"awful",m:"끔찍한[지독한]"},{w:"casual",m:"평상시의"},{w:"capable",m:"~을 할 수 있는"},{w:"absent",m:"결석한, 없는"},{w:"alike",m:"비슷한, 똑같이"},{w:"otherwise",m:"그렇지 않으면"}],
+"Day 49":[{w:"citizen",m:"시민"},{w:"fare",m:"(교통) 요금"},{w:"tale",m:"이야기"},{w:"suggestion",m:"제안"},{w:"responsibility",m:"책임"},{w:"risk",m:"위험"},{w:"intelligence",m:"지능"},{w:"viewpoint",m:"관점[시각]"},{w:"shell",m:"껍질"},{w:"surface",m:"표면"},{w:"version",m:"버전[판]"},{w:"account",m:"계좌, 설명(하다)"},{w:"influence",m:"영향(을 미치다)"},{w:"hesitate",m:"망설이다[주저하다]"},{w:"fasten",m:"매다"},{w:"manufacture",m:"제조하다"},{w:"hire",m:"고용하다"},{w:"examine",m:"조사[검사]하다"},{w:"explode",m:"폭발하다[폭파시키다]"},{w:"erase",m:"지우다"},{w:"interrupt",m:"방해하다[중단시키다]"},{w:"deny",m:"부인[부정]하다"},{w:"former",m:"이전의[전 ~]"},{w:"clever",m:"영리한[똑똑한]"},{w:"distant",m:"먼"},{w:"faint",m:"희미한"},{w:"double",m:"두 배(의), 2인용의, 두배로 되다"},{w:"entire",m:"전체의"},{w:"frequent",m:"잦은[빈번한]"},{w:"possibly",m:"아마"}],
+"Day 50":[{w:"author",m:"저자"},{w:"secretary",m:"비서"},{w:"beggar",m:"거지"},{w:"shepherd",m:"양치기"},{w:"fable",m:"우화"},{w:"tongue",m:"혀, 언어"},{w:"departure",m:"출발"},{w:"entrance",m:"입구, 입장, 입학"},{w:"method",m:"방법"},{w:"aptitude",m:"적성"},{w:"victory",m:"승리"},{w:"chain",m:"사슬[쇠줄], 체인[연쇄점]"},{w:"billion",m:"10억"},{w:"blossom",m:"꽃(이 피다)"},{w:"praise",m:"칭찬(하다)"},{w:"wind",m:"감다[돌리다], 바람"},{w:"require",m:"요구[필요]하다"},{w:"tremble",m:"떨다, 흔들리다"},{w:"starve",m:"굶주리다[굶어 죽다]"},{w:"quit",m:"그만두다"},{w:"spoil",m:"망치다"},{w:"punish",m:"벌주다[처벌하다]"},{w:"translate",m:"번역[통역]하다"},{w:"wealthy",m:"부유한"},{w:"independent",m:"독립된"},{w:"mild",m:"온화한, 순한"},{w:"harsh",m:"가혹한[혹독한]"},{w:"informal",m:"격식을 차리지 않는"},{w:"lunar",m:"달의"},{w:"overseas",m:"해외로[에], 해외의"}],
+"Day 51":[{w:"client",m:"의뢰인[고객]"},{w:"clown",m:"어릿광대"},{w:"empire",m:"제국"},{w:"dragon",m:"용"},{w:"nail",m:"손톱[발톱], 못"},{w:"baggage",m:"(여행) 짐[수하물]"},{w:"label",m:"라벨[표/상표]"},{w:"coal",m:"석탄"},{w:"bubble",m:"거품"},{w:"bug",m:"작은 곤충, (컴퓨터) 오류"},{w:"dawn",m:"새벽"},{w:"detail",m:"세부 사항"},{w:"plenty",m:"충분한[풍부한] 수량"},{w:"delight",m:"기쁨, 기쁘게 하다"},{w:"dispute",m:"분쟁[논쟁], 반박하다"},{w:"flame",m:"불길[불꽃], 타오르다"},{w:"flash",m:"번쩍이다[비추다], 섬광"},{w:"regret",m:"후회(하다), 유감"},{w:"bless",m:"축복하다"},{w:"spell",m:"철자를 쓰다[말하다]"},{w:"surround",m:"둘러싸다"},{w:"swear",m:"맹세하다, 욕하다"},{w:"wander",m:"돌아다니다[배회하다]"},{w:"generous",m:"인심 좋은[관대한]"},{w:"thankful",m:"감사하는"},{w:"instant",m:"즉각적인, 즉석의"},{w:"medium",m:"중간의"},{w:"virtual",m:"가상의"},{w:"illegal",m:"불법의"},{w:"either",m:"(부정문) ~도, (둘 중) 어느 하나(의)"}],
+"Day 52":[{w:"counselor",m:"상담원[카운슬러]"},{w:"opportunity",m:"기회"},{w:"literature",m:"문학"},{w:"illusion",m:"환상[착각]"},{w:"leisure",m:"여가[레저]"},{w:"shuttle",m:"정기 왕복 비행기[버스]"},{w:"location",m:"장소[위치]"},{w:"laundry",m:"세탁[세탁물/세탁소]"},{w:"witch",m:"마녀"},{w:"length",m:"길이"},{w:"relation",m:"관계"},{w:"popularity",m:"인기"},{w:"sort",m:"종류, 분류하다"},{w:"rent",m:"빌리다[빌려 주다], 집세"},{w:"commercial",m:"상업의, 광고 방송"},{w:"ideal",m:"이상(적인)"},{w:"complex",m:"복잡한, 단지, 콤플렉스"},{w:"junior",m:"하급의, 연하"},{w:"shut",m:"닫다"},{w:"bore",m:"지루하게 하다"},{w:"compose",m:"구성하다, 작곡하다"},{w:"mend",m:"수선[수리]하다"},{w:"inform",m:"알리다[통지하다]"},{w:"calculate",m:"계산하다"},{w:"ordinary",m:"보통의"},{w:"selfish",m:"이기적인"},{w:"strict",m:"엄(격)한"},{w:"sour",m:"(맛이) 신"},{w:"solar",m:"태양의"},{w:"neither",m:"~도 아니다"}],
+"Day 53":[{w:"appetite",m:"식욕"},{w:"beast",m:"짐승[야수]"},{w:"palm",m:"손바닥, 야자"},{w:"lab",m:"실험[실습]실"},{w:"horror",m:"공포"},{w:"chore",m:"(정기적으로 하는) (집안) 잡일"},{w:"outline",m:"개요, 윤곽"},{w:"crosswalk",m:"횡단보도"},{w:"rhyme",m:"(시의) (각)운"},{w:"charm",m:"매력, 매혹하다"},{w:"force",m:"힘[무력], 강요하다"},{w:"function",m:"기능(하다)"},{w:"contrast",m:"대조[차이], 대조하다"},{w:"assist",m:"돕다, 도움 주기"},{w:"employ",m:"고용하다"},{w:"govern",m:"통치[지배]하다"},{w:"entertain",m:"즐겁게 하다"},{w:"criticize",m:"비판[비판/비평]하다"},{w:"indicate",m:"보여 주다, 가리키다"},{w:"react",m:"반응하다"},{w:"dare",m:"감히 ~하다"},{w:"obvious",m:"명백한[분명한]"},{w:"facial",m:"얼굴의"},{w:"confident",m:"자신 있는, 확신하는"},{w:"proper",m:"적절한"},{w:"typical",m:"전형적인"},{w:"outer",m:"밖[외부]의"},{w:"realistic",m:"현실적인"},{w:"underwater",m:"물속의, 물속으로"},{w:"fairly",m:"꽤[상당히], 공정하게"}],
+"Day 54":[{w:"conductor",m:"지휘자, 열차 승무원"},{w:"court",m:"법정, 경기장, 궁정"},{w:"dictation",m:"받아쓰기"},{w:"jam",m:"(먹는) 잼, 막힘[혼잡]"},{w:"string",m:"끈[줄], (악기의) 현"},{w:"feather",m:"깃털"},{w:"scale",m:"규모, 등급, 저울"},{w:"spot",m:"장소[지점], (반)점[얼룩]"},{w:"shame",m:"부끄러움[수치], 유감"},{w:"chemistry",m:"화학"},{w:"import",m:"수입(품), 수입하다"},{w:"load",m:"짐, 싣다"},{w:"suspect",m:"의심하다, 용의자"},{w:"pat",m:"쓰다듬다, 쓰다듬기"},{w:"liquid",m:"액체(의)"},{w:"solid",m:"고체(의), 단단한"},{w:"leftover",m:"남은 음식, 남은"},{w:"evil",m:"악한, 악"},{w:"possess",m:"소유하다"},{w:"contribute",m:"기부하다, 기여하다"},{w:"recover",m:"회복되다[되찾다]"},{w:"ignore",m:"무시하다"},{w:"diligent",m:"근면한[성실한]"},{w:"pale",m:"창백한, 엷은"},{w:"brief",m:"짧은[간단한]"},{w:"rare",m:"드문, 살짝 익힌"},{w:"genetic",m:"유전(학)의"},{w:"organic",m:"유기농의, 유기체의"},{w:"holy",m:"신성한[성스러운]"},{w:"unfortunately",m:"불행히도"}],
+"Day 55":[{w:"anniversary",m:"기념일"},{w:"nutrient",m:"영양소[영양분]"},{w:"grain",m:"곡물"},{w:"document",m:"문서"},{w:"license",m:"면허(증)"},{w:"department",m:"부서[학과]"},{w:"fortune",m:"(행)운, 큰돈[재산]"},{w:"resource",m:"자원"},{w:"hunger",m:"굶주림[배고픔]"},{w:"error",m:"실수[오류]"},{w:"jail",m:"감옥[교도소]"},{w:"request",m:"요청(하다)"},{w:"bomb",m:"폭탄, 폭파[폭격]하다"},{w:"poison",m:"독, 독살하다"},{w:"wound",m:"상처(를 입히다)"},{w:"chase",m:"뒤쫓다, 추적"},{w:"amaze",m:"(크게) 놀라게 하다"},{w:"relieve",m:"덜어[없애] 주다, 완화하다"},{w:"motivate",m:"동기를 부여하다"},{w:"afford",m:"여유[형편]가 되다"},{w:"absorb",m:"빨아들이다[흡수하다]"},{w:"attach",m:"붙이다[첨부하다]"},{w:"cooperate",m:"협력[협동]하다"},{w:"defend",m:"방어[수비/옹호]하다"},{w:"aware",m:"알고 있는"},{w:"precious",m:"귀중한[소중한/값비싼]"},{w:"political",m:"정치의"},{w:"nuclear",m:"원자력의, 핵의"},{w:"indoor",m:"실내의"},{w:"aloud",m:"소리 내어"}],
+"Day 56":[{w:"atmosphere",m:"대기, 분위기"},{w:"voyage",m:"여행[항해]"},{w:"navy",m:"해군"},{w:"instrument",m:"기구, 악기"},{w:"tube",m:"관[튜브]"},{w:"leather",m:"가죽"},{w:"jewelry",m:"보석류[장신구]"},{w:"mud",m:"진흙"},{w:"target",m:"목표[표적/과녁]"},{w:"aspect",m:"측면"},{w:"anger",m:"화, 화나게 하다"},{w:"iron",m:"철, 다리미, 다림질하다"},{w:"comment",m:"논평(하다)"},{w:"protest",m:"항의(하다)"},{w:"concern",m:"걱정, 관심사, 관계되다"},{w:"dump",m:"버리다, (쓰레기) 폐기장"},{w:"enable",m:"할 수 있게 하다"},{w:"annoy",m:"짜증나게 하다"},{w:"insist",m:"주장하다[우기다]"},{w:"combine",m:"결합하다"},{w:"owe",m:"빚지고 있다"},{w:"suck",m:"빨다[빨아 먹다]"},{w:"awake",m:"깨어 있는, 깨(우)다"},{w:"idle",m:"게으른, 빈둥거리다"},{w:"previous",m:"이전의"},{w:"efficient",m:"능률[효율]적인"},{w:"rough",m:"거친, 대강[대략]의"},{w:"severe",m:"심(각)한, 엄(격)한"},{w:"romantic",m:"낭만적인"},{w:"sometime",m:"언젠가"}],
+"Day 57":[{w:"democracy",m:"민주주의"},{w:"justice",m:"정의"},{w:"faith",m:"신뢰, 신앙"},{w:"glory",m:"영광"},{w:"apology",m:"사과"},{w:"crisis",m:"위기"},{w:"debt",m:"빚[부채]"},{w:"gap",m:"틈[격차]"},{w:"angle",m:"각(도)"},{w:"theory",m:"이론[학설]"},{w:"nest",m:"둥지"},{w:"cycle",m:"순환(하다), 자전거(를 타다)"},{w:"remark",m:"발언, 언급하다"},{w:"comfort",m:"편안, 위로(하다)"},{w:"approach",m:"접근하다, 접근(법)"},{w:"struggle",m:"투쟁(하다)"},{w:"content",m:"내용(물), 만족하는"},{w:"acid",m:"산, 산(성)의"},{w:"differ",m:"다르다"},{w:"deserve",m:"받을 만하다"},{w:"permit",m:"허용[허락]하다"},{w:"forbid",m:"금(지)하다"},{w:"reject",m:"거부[거절]하다"},{w:"pure",m:"순수한[깨끗한]"},{w:"innocent",m:"무죄의, 무고한, 순진한"},{w:"slight",m:"약간의"},{w:"particular",m:"특정한, 특별한"},{w:"financial",m:"재정[금융]의"},{w:"unexpected",m:"예기치 않은"},{w:"aboard",m:"(배/비행기/열차에) 타고"}],
+"Day 58":[{w:"identity",m:"신원, 정체성"},{w:"devil",m:"악마[마귀]"},{w:"spectator",m:"관중"},{w:"income",m:"소득[수입]"},{w:"tax",m:"세금"},{w:"fee",m:"수수료[요금]"},{w:"fuel",m:"연료"},{w:"burden",m:"부담[짐]"},{w:"variety",m:"다양성[여러 가지]"},{w:"sum",m:"금액, 합계, 요약하다"},{w:"profit",m:"이익(을 얻다[주다])"},{w:"process",m:"과정, 가공[처리]하다"},{w:"exit",m:"출구, 나가다"},{w:"pop",m:"펑 하고 터지다, 팝뮤직(의), 대중적인"},{w:"purchase",m:"구입하다, 구입(품)"},{w:"defeat",m:"패배(시키다), 이기다"},{w:"persuade",m:"설득하다"},{w:"cheat",m:"부정행위를 하다, 속이다"},{w:"locate",m:"~에 위치하다, 위치를 찾아내다"},{w:"investigate",m:"조사하다"},{w:"distinguish",m:"구별하다"},{w:"adopt",m:"입양하다, 채택하다"},{w:"usual",m:"보통[평소]의"},{w:"fashionable",m:"유행하는"},{w:"sufficient",m:"충분한"},{w:"accurate",m:"정확한"},{w:"complicated",m:"복잡한"},{w:"artificial",m:"인공[인조]의"},{w:"tropical",m:"열대의"},{w:"hardly",m:"거의 ~ 않다"}],
+"Day 59":[{w:"genius",m:"천재[영재]"},{w:"servant",m:"하인"},{w:"profession",m:"전문직"},{w:"occupation",m:"직업, 점령"},{w:"surgery",m:"수술"},{w:"instruction",m:"설명, 지시"},{w:"principle",m:"원칙[원리/법칙]"},{w:"revolution",m:"혁명"},{w:"authority",m:"권한[권위], 당국"},{w:"rank",m:"지위[계급]"},{w:"property",m:"재산"},{w:"advantage",m:"유리한 점[이점]"},{w:"privacy",m:"사생활"},{w:"occasion",m:"때[경우], (특별한) 행사"},{w:"propose",m:"제안하다, 청혼하다"},{w:"approve",m:"찬성[승인]하다"},{w:"admit",m:"인정[시인]하다"},{w:"conduct",m:"수행[실시]하다"},{w:"reserve",m:"예약하다"},{w:"reveal",m:"드러내다[밝히다]"},{w:"donate",m:"기부[기증]하다"},{w:"involve",m:"포함하다, 관련시키다"},{w:"definite",m:"확실한[명확한]"},{w:"urban",m:"도시의"},{w:"addicted",m:"중독된[푹 빠진]"},{w:"extreme",m:"극도의[극단적인]"},{w:"academic",m:"학업의, 학구적인"},{w:"guilty",m:"죄책감을 느끼는, 유죄의"},{w:"conscious",m:"의식하는, 의식이 있는"},{w:"generally",m:"일반적으로[대체로]"}],
+"Day 60":[{w:"mankind",m:"인류"},{w:"poet",m:"시인"},{w:"detective",m:"형사[탐정]"},{w:"consumer",m:"소비자"},{w:"chef",m:"주방장[요리사]"},{w:"passion",m:"열정"},{w:"steel",m:"강철"},{w:"device",m:"장치"},{w:"pill",m:"알약[정제]"},{w:"ceiling",m:"천장"},{w:"aisle",m:"통로"},{w:"appearance",m:"외모, 출현"},{w:"destination",m:"목적지"},{w:"sweat",m:"땀(을 흘리다)"},{w:"switch",m:"스위치, 전환, 바꾸다"},{w:"grab",m:"움켜잡다[잡아채다], 잡아채기"},{w:"plain",m:"분명한, 소박한, 평야"},{w:"giant",m:"거대한, 거인"},{w:"found",m:"설립하다"},{w:"seek",m:"찾다, (추)구하다"},{w:"rob",m:"강탈하다[털다]"},{w:"swing",m:"흔들(리)다"},{w:"cancel",m:"취소하다"},{w:"avoid",m:"(회)피하다"},{w:"rotten",m:"썩은"},{w:"magnetic",m:"자기[자성]의, 자석 같은"},{w:"steep",m:"가파른"},{w:"logical",m:"논리적인"},{w:"ridiculous",m:"어리석은[우스꽝스러운]"},{w:"upstairs",m:"위층으로[에], 위층(의)"}]
+};
+
+const DAYS = Object.keys(VOCAB);
+
+// ════════════════════════════════════
+//  STATE
+// ════════════════════════════════════
+let curDay = DAYS[0];
+let curList = [];
+let dispList = [];  // 현재 표시 순서
+let hideKor = false, hideEng = false;
+
+// FC
+let fcList=[], fcIdx=0;
+
+// Quiz (영어→뜻)
+let qList=[], qIdx=0, qC=0, qW=0;
+
+// Meaning (뜻→영어)
+let mList=[], mIdx=0, mC=0, mW=0;
+
+// Spell
+let spList=[], spIdx=0, spC=0, spW=0, spPending=false;
+
+// Speech
+let englishVoices=[], speakTimer=null, isSpeaking=false;
+
+// ════════════════════════════════════
+//  HOME
+// ════════════════════════════════════
+function buildHome(){
+  const grid = document.getElementById('dayGrid');
+  grid.innerHTML = DAYS.map((d,i)=>`
+    <div class="day-card" onclick="openDay('${d}')">
+      <div class="day-card-num">Day</div>
+      <div class="day-card-label">${i+1}</div>
+    </div>
+  `).join('');
+}
+
+function openDay(day){
+  curDay = day;
+  curList = [...VOCAB[day]];
+  dispList = [...curList];
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('studyScreen').style.display = 'block';
+  document.getElementById('studyTitle').textContent = day;
+  document.getElementById('dnLabel').textContent = day;
+  updateDayNav();
+  switchMode('list');
+  window.scrollTo(0,0);
+}
+
+function goHome(){
+  document.getElementById('studyScreen').style.display = 'none';
+  document.getElementById('homeScreen').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function changeDay(dir){
+  const idx = DAYS.indexOf(curDay);
+  const next = idx + dir;
+  if(next < 0 || next >= DAYS.length) return;
+  openDay(DAYS[next]);
+}
+
+function updateDayNav(){
+  const idx = DAYS.indexOf(curDay);
+  document.getElementById('dnPrev').disabled = idx === 0;
+  document.getElementById('dnNext').disabled = idx === DAYS.length - 1;
+  document.getElementById('dnLabel').textContent = curDay;
+}
+
+// ════════════════════════════════════
+//  MODE SWITCH
+// ════════════════════════════════════
+function switchMode(mode){
+  ['list','fc','quiz','meaning','spell'].forEach(m=>{
+    const pane = document.getElementById(m==='list'?'listPane':m==='fc'?'fcPane':m+'Pane');
+    if(pane) pane.style.display = 'none';
+  });
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+
+  const paneId = mode==='list'?'listPane':mode==='fc'?'fcPane':mode+'Pane';
+  document.getElementById(paneId).style.display = 'block';
+
+  if(mode==='list')    renderList();
+  if(mode==='fc')      startFC();
+  if(mode==='quiz')    startQuiz();
+  if(mode==='meaning') startMeaning();
+  if(mode==='spell')   startSpell();
+}
+
+// ════════════════════════════════════
+//  LIST MODE
+// ════════════════════════════════════
+function renderList(){
+  const list = document.getElementById('wordList');
+  list.innerHTML = dispList.map((item,i)=>`
+    <div class="word-item" style="animation-delay:${Math.min(i*0.02,0.4)}s">
+      <div class="word-eng${hideEng?' blur':''}">
+        <span class="eng-txt">${item.w}</span>
+      </div>
+      <div class="word-kor${hideKor?' blur':''}">${item.m}</div>
+      <button class="spk-btn" onclick="speak('${item.w.replace(/'/g,"\\'")}',this)">🔊</button>
+    </div>
+  `).join('');
+}
+
+function toggleKor(){
+  hideKor=!hideKor;
+  document.getElementById('tKor').classList.toggle('on',hideKor);
+  document.querySelectorAll('.word-kor').forEach(el=>el.classList.toggle('blur',hideKor));
+}
+function toggleEng(){
+  hideEng=!hideEng;
+  document.getElementById('tEng').classList.toggle('on',hideEng);
+  document.querySelectorAll('.word-eng').forEach(el=>el.classList.toggle('blur',hideEng));
+}
+function shuffleList(){
+  dispList = shuffle([...curList]);
+  renderList();
+}
+
+// ════════════════════════════════════
+//  FLASHCARD
+// ════════════════════════════════════
+function startFC(){
+  fcList=[...curList]; fcIdx=0;
+  document.getElementById('fcCard').classList.remove('flipped');
+  updateFC();
+}
+function updateFC(){
+  const card = document.getElementById('fcCard');
+  const doUpdate = ()=>{
+    const item = fcList[fcIdx];
+    document.getElementById('fcWord').textContent = item.w;
+    document.getElementById('fcMeaning').textContent = item.m;
+    document.getElementById('fcCounter').textContent = `${fcIdx+1} / ${fcList.length}`;
+    document.getElementById('fcBar').style.width = `${(fcIdx+1)/fcList.length*100}%`;
+    document.getElementById('fcPrev').disabled = fcIdx===0;
+    document.getElementById('fcNext').disabled = fcIdx===fcList.length-1;
+  };
+  if(card.classList.contains('flipped')){
+    card.classList.remove('flipped');
+    setTimeout(doUpdate, 460);
+  } else {
+    doUpdate();
+  }
+}
+function flipFC(){ document.getElementById('fcCard').classList.toggle('flipped'); }
+function spkFC(e){ e.stopPropagation(); speak(document.getElementById('fcWord').textContent); }
+function fcMove(dir){ fcIdx=Math.max(0,Math.min(fcList.length-1,fcIdx+dir)); updateFC(); }
+function fcShuffle(){ fcList=shuffle([...curList]); fcIdx=0; document.getElementById('fcCard').classList.remove('flipped'); updateFC(); }
+
+// ════════════════════════════════════
+//  QUIZ (영어→뜻 객관식)
+// ════════════════════════════════════
+function startQuiz(){
+  qList=shuffle([...curList]); qIdx=0; qC=0; qW=0;
+  document.getElementById('qResult').classList.remove('show');
+  document.getElementById('qOpts').parentElement.style.display='block';
+  updateScores('q');
+  renderQ();
+}
+function renderQ(){
+  if(qIdx>=qList.length){endQuiz();return;}
+  const item=qList[qIdx];
+  document.getElementById('qWord').textContent=item.w;
+  document.getElementById('qC').textContent=qC;
+  document.getElementById('qW').textContent=qW;
+  document.getElementById('qL').textContent=qList.length-qIdx;
+  const opts=shuffle([item,...getRandWrong(item,3,'m')]);
+  document.getElementById('qOpts').innerHTML=opts.map(o=>`
+    <button class="qopt" onclick="answerQ(this,'${esc(o.m)}','${esc(item.m)}','quiz')">${o.m}</button>
+  `).join('');
+  document.getElementById('qNext').classList.remove('show');
+}
+function answerQ(btn,chosen,correct,type){
+  document.querySelectorAll(`#${type==='quiz'?'qOpts':'mOpts'} .qopt`).forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===correct) b.classList.add('correct');
+  });
+  if(chosen===correct){ if(type==='quiz')qC++;else mC++; btn.classList.add('correct');}
+  else{ if(type==='quiz')qW++;else mW++; btn.classList.add('wrong');}
+  updateScores(type==='quiz'?'q':'m');
+  document.getElementById(type==='quiz'?'qNext':'mNext').classList.add('show');
+}
+function nextQ(type){
+  if(type==='quiz'){qIdx++;renderQ();}
+  else{mIdx++;renderM();}
+}
+function endQuiz(){
+  document.getElementById('qOpts').innerHTML='';
+  document.getElementById('qNext').classList.remove('show');
+  const r=document.getElementById('qResult');
+  r.classList.add('show');
+  const pct=Math.round(qC/qList.length*100);
+  document.getElementById('qEm').textContent=pct>=80?'🎉':pct>=50?'👍':'💪';
+  document.getElementById('qSub').textContent=`${qList.length}문제 중 ${qC}개 정답 (${pct}%)`;
+}
+
+// ════════════════════════════════════
+//  MEANING QUIZ (뜻→영어 객관식)
+// ════════════════════════════════════
+function startMeaning(){
+  mList=shuffle([...curList]); mIdx=0; mC=0; mW=0;
+  document.getElementById('mResult').classList.remove('show');
+  updateScores('m');
+  renderM();
+}
+function renderM(){
+  if(mIdx>=mList.length){endMeaning();return;}
+  const item=mList[mIdx];
+  document.getElementById('mWord').textContent=item.m;
+  document.getElementById('mC').textContent=mC;
+  document.getElementById('mW').textContent=mW;
+  document.getElementById('mL').textContent=mList.length-mIdx;
+  const opts=shuffle([item,...getRandWrong(item,3,'w')]);
+  document.getElementById('mOpts').innerHTML=opts.map(o=>`
+    <button class="qopt" onclick="answerQ(this,'${esc(o.w)}','${esc(item.w)}','meaning')">${o.w}</button>
+  `).join('');
+  document.getElementById('mNext').classList.remove('show');
+}
+function endMeaning(){
+  document.getElementById('mOpts').innerHTML='';
+  document.getElementById('mNext').classList.remove('show');
+  const r=document.getElementById('mResult');
+  r.classList.add('show');
+  const pct=Math.round(mC/mList.length*100);
+  document.getElementById('mEm').textContent=pct>=80?'🎉':pct>=50?'👍':'💪';
+  document.getElementById('mSub').textContent=`${mList.length}문제 중 ${mC}개 정답 (${pct}%)`;
+}
+
+// ════════════════════════════════════
+//  SPELLING
+// ════════════════════════════════════
+function startSpell(){
+  spList=shuffle([...curList]); spIdx=0; spC=0; spW=0; spPending=false;
+  document.getElementById('spResult').classList.remove('show');
+  document.getElementById('spWord').parentElement.style.display='block';
+  updateScores('sp');
+  renderSpell();
+}
+function renderSpell(){
+  if(spIdx>=spList.length){endSpell();return;}
+  const item=spList[spIdx];
+  document.getElementById('spWord').textContent=item.m;
+  document.getElementById('spL').textContent=spList.length-spIdx;
+  const inp=document.getElementById('spInput');
+  inp.value=''; inp.className='spell-input';
+  document.getElementById('spFb').textContent='';
+  document.getElementById('spFb').className='spell-fb';
+  spPending=false;
+  setTimeout(()=>inp.focus(),50);
+}
+function submitSpell(){
+  const item=spList[spIdx];
+  const inp=document.getElementById('spInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  if(spPending){ spIdx++; renderSpell(); return; }
+  const fb=document.getElementById('spFb');
+  if(val.toLowerCase()===item.w.toLowerCase()){
+    inp.className='spell-input ok';
+    fb.textContent='✅ 정답!'; fb.className='spell-fb ok';
+    spC++;
+  } else {
+    inp.className='spell-input ng';
+    fb.textContent=`❌ 정답: ${item.w}`; fb.className='spell-fb ng';
+    inp.classList.add('shake'); setTimeout(()=>inp.classList.remove('shake'),350);
+    spW++;
+  }
+  updateScores('sp');
+  spPending=true;
+}
+function endSpell(){
+  document.getElementById('spWord').parentElement.style.display='none';
+  const r=document.getElementById('spResult');
+  r.classList.add('show');
+  const pct=Math.round(spC/spList.length*100);
+  document.getElementById('spSub').textContent=`${spList.length}문제 중 ${spC}개 정답 (${pct}%)`;
+}
+
+// ════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════
+function updateScores(prefix){
+  if(prefix==='q'){
+    document.getElementById('qC').textContent=qC;
+    document.getElementById('qW').textContent=qW;
+    document.getElementById('qL').textContent=Math.max(0,qList.length-qIdx);
+  } else if(prefix==='m'){
+    document.getElementById('mC').textContent=mC;
+    document.getElementById('mW').textContent=mW;
+    document.getElementById('mL').textContent=Math.max(0,mList.length-mIdx);
+  } else {
+    document.getElementById('spC').textContent=spC;
+    document.getElementById('spW').textContent=spW;
+    document.getElementById('spL').textContent=Math.max(0,spList.length-spIdx);
+  }
+}
+function getRandWrong(item,n,key){
+  return shuffle(curList.filter(x=>x.w!==item.w)).slice(0,n);
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function esc(s){ return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// ════════════════════════════════════
+//  SPEECH (Web Speech API)
+// ════════════════════════════════════
+function setBestVoices(){
+  if(!('speechSynthesis' in window)) return;
+  englishVoices = window.speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));
+}
+function getBestVoice(){
+  if(!englishVoices.length) return null;
+  for(const name of ['Samantha','Daniel','Alex','Karen','Google US English','Microsoft Aria Online','Microsoft Jenny Online']){
+    const v = englishVoices.find(v=>v.name.includes(name));
+    if(v) return v;
+  }
+  return englishVoices.find(v=>v.lang.toLowerCase()==='en-us') || englishVoices[0];
+}
+if('speechSynthesis' in window){
+  setBestVoices();
+  window.speechSynthesis.onvoiceschanged = setBestVoices;
+}
+function speak(word, btn){
+  if(!('speechSynthesis' in window)) return;
+  if(speakTimer){ clearTimeout(speakTimer); speakTimer=null; }
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  isSpeaking=false;
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang='en-US'; u.rate=0.95; u.pitch=1; u.volume=1;
+  const v=getBestVoice();
+  if(v){ u.voice=v; u.lang=v.lang; }
+  u.onstart=()=>{ isSpeaking=true; if(btn) btn.classList.add('playing'); };
+  u.onend=()=>{ isSpeaking=false; if(btn) btn.classList.remove('playing'); };
+  u.onerror=()=>{ isSpeaking=false; if(btn) btn.classList.remove('playing'); };
+  speakTimer=setTimeout(()=>{ if(!isSpeaking) window.speechSynthesis.speak(u); speakTimer=null; }, 60);
+}
+
+// ════════════════════════════════════
+//  INIT
+// ════════════════════════════════════
+buildHome();
+</script>
+</body>
+</html>
