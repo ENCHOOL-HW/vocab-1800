@@ -118,18 +118,14 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   display:flex;gap:0;
   background:var(--white);
   border-bottom:2px solid var(--green-border);
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
 }
-.mode-tabs::-webkit-scrollbar{display:none}
 .mode-tab{
-  flex:0 0 auto;
-  padding:12px 16px;
+  flex:1;
+  padding:12px 4px;
   border:none;background:transparent;
-  font-size:0.82rem;font-weight:700;
+  font-size:0.75rem;font-weight:700;
   color:var(--text3);cursor:pointer;
-  white-space:nowrap;
+  white-space:nowrap;text-align:center;
   border-bottom:3px solid transparent;
   margin-bottom:-2px;
   transition:all 0.15s;
@@ -181,12 +177,18 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   min-width:110px;max-width:140px;
   letter-spacing:-0.3px;
 }
-.word-eng.blur span.eng-txt{filter:blur(5px);user-select:none;}
+.word-eng.blur span.eng-txt{
+  color:transparent;background:#ddd;border-radius:6px;user-select:none;
+  display:inline-block;width:80px;height:1.1em;vertical-align:middle;
+}
 .word-kor{
   font-size:0.85rem;color:var(--text2);
   line-height:1.45;flex:1;
 }
-.word-kor.blur{filter:blur(5px);user-select:none;}
+.word-kor.blur{
+  color:transparent;background:#ddd;border-radius:6px;user-select:none;
+  display:inline-block;width:120px;height:1em;vertical-align:middle;
+}
 .spk-btn{
   flex:0 0 34px;height:34px;
   background:var(--green-card);
@@ -196,6 +198,25 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   color:var(--green);
 }
 .spk-btn.playing{background:var(--green);color:#fff;}
+
+
+/* 탭하여 보기 */
+.reveal-btn{
+  display:none;
+  background:var(--green-card);
+  border:1.5px solid var(--green-border);
+  color:var(--green);
+  font-size:0.72rem;font-weight:700;
+  padding:4px 10px;border-radius:20px;
+  cursor:pointer;white-space:nowrap;
+  flex:0 0 auto;
+}
+.word-item.has-hidden .reveal-btn{display:inline-flex;align-items:center;}
+.word-item.revealed .word-eng.blur span.eng-txt,
+.word-item.revealed .word-kor.blur{
+  color:var(--text)!important;background:transparent!important;
+  width:auto!important;height:auto!important;
+}
 
 /* ── 플래시카드 ── */
 #fcPane{display:none;padding:16px 16px 100px;}
@@ -330,7 +351,7 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   box-shadow:var(--shadow);
 }
 .spell-prompt{font-size:0.7rem;color:var(--text3);margin-bottom:8px;letter-spacing:1px;}
-.spell-word{font-size:1.5rem;font-weight:800;color:var(--text);}
+.spell-word{font-size:1rem;font-weight:600;color:var(--text2);line-height:1.5;}
 .spell-input{
   width:100%;background:var(--white);
   border:2px solid var(--green-border);
@@ -406,6 +427,57 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   flex:1;text-align:center;
   font-size:0.9rem;font-weight:800;color:var(--green);
 }
+
+/* ── 랜덤 테스트 ── */
+#randomPane{display:none;padding:14px 14px 100px;}
+.rand-toolbar{
+  display:flex;gap:8px;padding:0 0 12px;
+  align-items:center;flex-wrap:wrap;
+}
+.rand-submit-all{
+  background:var(--green);color:#fff;
+  border:none;padding:10px 20px;border-radius:20px;
+  font-size:0.85rem;font-weight:700;cursor:pointer;
+}
+.rand-list{display:flex;flex-direction:column;gap:10px;}
+.rand-item{
+  background:var(--white);
+  border:1.5px solid var(--green-border);
+  border-radius:14px;
+  padding:14px;
+  box-shadow:var(--shadow);
+}
+.rand-item.correct{background:#f0fff4;border-color:var(--green);}
+.rand-item.wrong{background:#fff5f5;border-color:var(--red);}
+.rand-type{
+  font-size:0.65rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text3);
+  font-weight:700;margin-bottom:6px;
+}
+.rand-given{
+  font-size:1rem;font-weight:700;color:var(--text);
+  margin-bottom:8px;line-height:1.4;
+}
+.rand-input{
+  width:100%;background:var(--green-bg);
+  border:1.5px solid var(--green-border);
+  color:var(--text);padding:10px 12px;
+  border-radius:10px;font-size:0.95rem;
+  font-weight:600;outline:none;
+  transition:border-color 0.2s;
+}
+.rand-input:focus{border-color:var(--green);}
+.rand-input.ok{border-color:var(--green);background:#e8f5e9;color:var(--green);}
+.rand-input.ng{border-color:var(--red);background:#ffebee;}
+.rand-input:disabled{opacity:1;}
+.rand-answer{
+  display:none;margin-top:6px;
+  font-size:0.8rem;color:var(--red);font-weight:700;
+}
+.rand-answer.show{display:block;}
+.rand-result-row{
+  display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;
+}
 </style>
 </head>
 <body>
@@ -434,10 +506,10 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
   <!-- 모드 탭 -->
   <div class="mode-tabs">
     <button class="mode-tab active" data-mode="list"    onclick="switchMode('list')">목록</button>
-    <button class="mode-tab"        data-mode="fc"      onclick="switchMode('fc')">플래시카드</button>
-    <button class="mode-tab"        data-mode="quiz"    onclick="switchMode('quiz')">객관식</button>
-    <button class="mode-tab"        data-mode="meaning" onclick="switchMode('meaning')">뜻 객관식</button>
+    <button class="mode-tab"        data-mode="meaning" onclick="switchMode('meaning')">단어 뜻</button>
     <button class="mode-tab"        data-mode="spell"   onclick="switchMode('spell')">스펠링</button>
+    <button class="mode-tab"        data-mode="random"  onclick="switchMode('random')">랜덤 테스트</button>
+    <button class="mode-tab"        data-mode="fc"      onclick="switchMode('fc')">플래시 카드</button>
   </div>
 
   <!-- 목록 모드 -->
@@ -449,6 +521,31 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
       <button class="shuffle-btn" onclick="shuffleList()">🔀 셔플</button>
     </div>
     <div class="word-list" id="wordList"></div>
+  </div>
+
+
+  <!-- 랜덤 테스트 -->
+  <div id="randomPane">
+    <div class="rand-toolbar">
+      <div style="font-size:0.8rem;color:var(--text3);font-weight:600;flex:1;">
+        단어·뜻이 무작위로 섞여서 출제돼요
+      </div>
+      <button class="rand-submit-all" onclick="submitRandom()">채점하기</button>
+    </div>
+    <div class="score-row" id="randScoreRow" style="display:none;margin-bottom:14px;">
+      <div class="score-box"><div class="score-n g" id="randC">0</div><div class="score-l">정답</div></div>
+      <div class="score-box"><div class="score-n r" id="randW">0</div><div class="score-l">오답</div></div>
+    </div>
+    <div class="rand-list" id="randList"></div>
+    <div class="result-box" id="randResult" style="margin-top:16px;">
+      <div class="result-em" id="randEm">🎲</div>
+      <div class="result-title">완료!</div>
+      <div class="result-sub" id="randSub"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px;">
+        <button class="retry-btn" onclick="startRandom()">전체 다시 풀기</button>
+        <button class="retry-btn" id="randRetryWrong" onclick="retryWrongRandom()" style="background:var(--red);border-color:var(--red);color:#fff;display:none;">틀린 단어만 다시 풀기</button>
+      </div>
+    </div>
   </div>
 
   <!-- 플래시카드 모드 -->
@@ -476,28 +573,7 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
     </div>
   </div>
 
-  <!-- 객관식 (영어→뜻) -->
-  <div id="quizPane">
-    <div class="score-row">
-      <div class="score-box"><div class="score-n g" id="qC">0</div><div class="score-l">정답</div></div>
-      <div class="score-box"><div class="score-n r" id="qW">0</div><div class="score-l">오답</div></div>
-      <div class="score-box"><div class="score-n b" id="qL">0</div><div class="score-l">남은 문제</div></div>
-    </div>
-    <div class="quiz-q-box">
-      <div class="quiz-qlabel">영단어의 뜻을 고르세요</div>
-      <div class="quiz-qword" id="qWord"></div>
-    </div>
-    <div class="quiz-opts" id="qOpts"></div>
-    <button class="next-q-btn" id="qNext" onclick="nextQ('quiz')">다음 문제 →</button>
-    <div class="result-box" id="qResult">
-      <div class="result-em" id="qEm">🎉</div>
-      <div class="result-title">완료!</div>
-      <div class="result-sub" id="qSub"></div>
-      <button class="retry-btn" onclick="startQuiz()">다시 풀기</button>
-    </div>
-  </div>
-
-  <!-- 뜻 객관식 (뜻→영어) -->
+  <!-- 뜻 퀴즈 (뜻→영어 객관식) -->
   <div id="meaningPane">
     <div class="score-row">
       <div class="score-box"><div class="score-n g" id="mC">0</div><div class="score-l">정답</div></div>
@@ -514,7 +590,10 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
       <div class="result-em" id="mEm">🧠</div>
       <div class="result-title">완료!</div>
       <div class="result-sub" id="mSub"></div>
-      <button class="retry-btn" onclick="startMeaning()">다시 풀기</button>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="retry-btn" onclick="startMeaning()">전체 다시 풀기</button>
+        <button class="retry-btn" id="mRetryWrong" onclick="retryWrong('meaning')" style="background:var(--red);border-color:var(--red);color:#fff;display:none;">틀린 문제만 다시 풀기</button>
+      </div>
     </div>
   </div>
 
@@ -537,7 +616,10 @@ html,body{min-height:100%;background:var(--green-bg);color:var(--text);font-fami
       <div class="result-em">✏️</div>
       <div class="result-title">완료!</div>
       <div class="result-sub" id="spSub"></div>
-      <button class="retry-btn" onclick="startSpell()">다시 풀기</button>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="retry-btn" onclick="startSpell()">전체 다시 풀기</button>
+        <button class="retry-btn" id="spRetryWrong" onclick="retryWrong('spell')" style="background:var(--red);border-color:var(--red);color:#fff;display:none;">틀린 문제만 다시 풀기</button>
+      </div>
     </div>
   </div>
 
@@ -629,9 +711,7 @@ let hideKor = false, hideEng = false;
 // FC
 let fcList=[], fcIdx=0;
 
-// Quiz (영어→뜻)
-let qList=[], qIdx=0, qC=0, qW=0;
-
+// Quiz (영어→뜻) - 제거됨
 // Meaning (뜻→영어)
 let mList=[], mIdx=0, mC=0, mW=0;
 
@@ -640,6 +720,125 @@ let spList=[], spIdx=0, spC=0, spW=0, spPending=false;
 
 // Speech
 let englishVoices=[], speakTimer=null, isSpeaking=false;
+
+
+// ════════════════════════════════════
+//  랜덤 테스트
+// ════════════════════════════════════
+let randItems = [];   // {item, type:'eng'|'kor'} 
+let randWrongItems = [];
+let randGraded = false;
+
+function startRandom(list){
+  const src = list || curList;
+  // 각 단어마다 랜덤으로 eng(뜻 보고 영어 입력) 또는 kor(영어 보고 뜻 입력) 결정
+  randItems = shuffle([...src]).map(item=>({
+    item,
+    type: Math.random() < 0.5 ? 'eng' : 'kor'
+  }));
+  randGraded = false;
+  randWrongItems = [];
+  document.getElementById('randResult').classList.remove('show');
+  document.getElementById('randScoreRow').style.display = 'none';
+  document.getElementById('randRetryWrong').style.display = 'none';
+  renderRandom();
+}
+
+function renderRandom(){
+  const container = document.getElementById('randList');
+  container.innerHTML = randItems.map((r,i) => {
+    const {item, type} = r;
+    const given  = type==='kor' ? item.w : item.m; // 보여줄 것
+    const typeLabel = type==='kor' ? '영어 단어를 입력하세요' : '한국어 뜻을 입력하세요';
+    const placeholder = type==='kor' ? '영어 입력...' : '뜻 입력...';
+    return `
+      <div class="rand-item" id="ri-${i}">
+        <div class="rand-type">${typeLabel}</div>
+        <div class="rand-given">${given}</div>
+        <input class="rand-input" id="ri-inp-${i}" 
+          placeholder="${placeholder}" 
+          autocomplete="off" spellcheck="false"
+          onkeydown="if(event.key==='Enter'){document.getElementById('ri-inp-${Math.min(i+1, randItems.length-1)}').focus()}"
+          data-idx="${i}">
+        <div class="rand-answer" id="ri-ans-${i}"></div>
+      </div>
+    `;
+  }).join('');
+  // 첫 입력칸 포커스
+  setTimeout(()=>{
+    const first = document.getElementById('ri-inp-0');
+    if(first) first.focus();
+  }, 80);
+}
+
+function submitRandom(){
+  if(randGraded) { startRandom(); return; }
+  randGraded = true;
+  randWrongItems = [];
+  let correct = 0;
+
+  randItems.forEach((r, i) => {
+    const inp = document.getElementById('ri-inp-'+i);
+    const row = document.getElementById('ri-'+i);
+    const ansEl = document.getElementById('ri-ans-'+i);
+    if(!inp) return;
+
+    const val = inp.value.trim();
+    const answer = r.type==='kor' ? r.item.w : r.item.m;
+
+    inp.disabled = true;
+
+    // 정답 체크 (영어: 대소문자 무시, 한국어: 공백 무시)
+    const norm = s => s.toLowerCase().replace(/\s/g,'').replace(/[()[\]~]/g,'');
+    // 한국어는 여러 뜻 중 하나라도 포함하면 정답
+    let isCorrect = false;
+    if(r.type==='kor'){
+      isCorrect = norm(val) === norm(answer);
+    } else {
+      // 뜻은 쉼표로 구분된 여러 뜻 중 하나라도 일치하면 OK
+      const answers = answer.split(/[,，]/).map(a=>norm(a.trim()));
+      isCorrect = answers.some(a => a && norm(val).includes(a) || (a && a.includes(norm(val)) && norm(val).length > 1));
+    }
+
+    if(isCorrect){
+      correct++;
+      row.classList.add('correct');
+      inp.classList.add('ok');
+    } else {
+      row.classList.add('wrong');
+      inp.classList.add('ng');
+      ansEl.textContent = '정답: ' + answer;
+      ansEl.classList.add('show');
+      randWrongItems.push(r);
+    }
+  });
+
+  // 점수 표시
+  const total = randItems.length;
+  const pct = Math.round(correct/total*100);
+  document.getElementById('randScoreRow').style.display = 'flex';
+  document.getElementById('randC').textContent = correct;
+  document.getElementById('randW').textContent = total - correct;
+  document.getElementById('randEm').textContent = pct>=80?'🎉':pct>=50?'👍':'💪';
+  document.getElementById('randSub').textContent = `${total}문제 중 ${correct}개 정답 (${pct}%)`;
+  document.getElementById('randResult').classList.add('show');
+
+  if(randWrongItems.length > 0){
+    const btn = document.getElementById('randRetryWrong');
+    btn.style.display = 'inline-block';
+    btn.textContent = `틀린 ${randWrongItems.length}단어 다시 풀기`;
+  }
+
+  // 틀린 문제로 스크롤
+  const firstWrong = document.querySelector('.rand-item.wrong');
+  if(firstWrong) firstWrong.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function retryWrongRandom(){
+  // 틀린 단어들만 뽑아서 새로 시작
+  const wrongSrc = randWrongItems.map(r=>r.item);
+  startRandom(wrongSrc);
+}
 
 // ════════════════════════════════════
 //  HOME
@@ -691,21 +890,20 @@ function updateDayNav(){
 //  MODE SWITCH
 // ════════════════════════════════════
 function switchMode(mode){
-  ['list','fc','quiz','meaning','spell'].forEach(m=>{
-    const pane = document.getElementById(m==='list'?'listPane':m==='fc'?'fcPane':m+'Pane');
-    if(pane) pane.style.display = 'none';
+  ['listPane','fcPane','meaningPane','spellPane','randomPane'].forEach(id=>{
+    document.getElementById(id).style.display='none';
   });
   document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
   document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
 
   const paneId = mode==='list'?'listPane':mode==='fc'?'fcPane':mode+'Pane';
-  document.getElementById(paneId).style.display = 'block';
+  document.getElementById(paneId).style.display='block';
 
   if(mode==='list')    renderList();
   if(mode==='fc')      startFC();
-  if(mode==='quiz')    startQuiz();
   if(mode==='meaning') startMeaning();
   if(mode==='spell')   startSpell();
+  if(mode==='random')  startRandom();
 }
 
 // ════════════════════════════════════
@@ -714,25 +912,36 @@ function switchMode(mode){
 function renderList(){
   const list = document.getElementById('wordList');
   list.innerHTML = dispList.map((item,i)=>`
-    <div class="word-item" style="animation-delay:${Math.min(i*0.02,0.4)}s">
+    <div class="word-item${(hideEng||hideKor)?' has-hidden':''}" style="animation-delay:${Math.min(i*0.02,0.4)}s" id="wi-${i}">
       <div class="word-eng${hideEng?' blur':''}">
         <span class="eng-txt">${item.w}</span>
       </div>
       <div class="word-kor${hideKor?' blur':''}">${item.m}</div>
+      <button class="reveal-btn" onclick="revealItem(${i})">탭하여 보기</button>
       <button class="spk-btn" onclick="speak('${item.w.replace(/'/g,"\\'")}',this)">🔊</button>
     </div>
   `).join('');
 }
 
+function revealItem(i){
+  const el = document.getElementById('wi-'+i);
+  if(!el) return;
+  if(el.classList.contains('revealed')){
+    el.classList.remove('revealed');
+  } else {
+    el.classList.add('revealed');
+  }
+}
+
 function toggleKor(){
   hideKor=!hideKor;
   document.getElementById('tKor').classList.toggle('on',hideKor);
-  document.querySelectorAll('.word-kor').forEach(el=>el.classList.toggle('blur',hideKor));
+  renderList();
 }
 function toggleEng(){
   hideEng=!hideEng;
   document.getElementById('tEng').classList.toggle('on',hideEng);
-  document.querySelectorAll('.word-eng').forEach(el=>el.classList.toggle('blur',hideEng));
+  renderList();
 }
 function shuffleList(){
   dispList = shuffle([...curList]);
@@ -771,58 +980,14 @@ function fcMove(dir){ fcIdx=Math.max(0,Math.min(fcList.length-1,fcIdx+dir)); upd
 function fcShuffle(){ fcList=shuffle([...curList]); fcIdx=0; document.getElementById('fcCard').classList.remove('flipped'); updateFC(); }
 
 // ════════════════════════════════════
-//  QUIZ (영어→뜻 객관식)
-// ════════════════════════════════════
-function startQuiz(){
-  qList=shuffle([...curList]); qIdx=0; qC=0; qW=0;
-  document.getElementById('qResult').classList.remove('show');
-  document.getElementById('qOpts').parentElement.style.display='block';
-  updateScores('q');
-  renderQ();
-}
-function renderQ(){
-  if(qIdx>=qList.length){endQuiz();return;}
-  const item=qList[qIdx];
-  document.getElementById('qWord').textContent=item.w;
-  document.getElementById('qC').textContent=qC;
-  document.getElementById('qW').textContent=qW;
-  document.getElementById('qL').textContent=qList.length-qIdx;
-  const opts=shuffle([item,...getRandWrong(item,3,'m')]);
-  document.getElementById('qOpts').innerHTML=opts.map(o=>`
-    <button class="qopt" onclick="answerQ(this,'${esc(o.m)}','${esc(item.m)}','quiz')">${o.m}</button>
-  `).join('');
-  document.getElementById('qNext').classList.remove('show');
-}
-function answerQ(btn,chosen,correct,type){
-  document.querySelectorAll(`#${type==='quiz'?'qOpts':'mOpts'} .qopt`).forEach(b=>{
-    b.disabled=true;
-    if(b.textContent.trim()===correct) b.classList.add('correct');
-  });
-  if(chosen===correct){ if(type==='quiz')qC++;else mC++; btn.classList.add('correct');}
-  else{ if(type==='quiz')qW++;else mW++; btn.classList.add('wrong');}
-  updateScores(type==='quiz'?'q':'m');
-  document.getElementById(type==='quiz'?'qNext':'mNext').classList.add('show');
-}
-function nextQ(type){
-  if(type==='quiz'){qIdx++;renderQ();}
-  else{mIdx++;renderM();}
-}
-function endQuiz(){
-  document.getElementById('qOpts').innerHTML='';
-  document.getElementById('qNext').classList.remove('show');
-  const r=document.getElementById('qResult');
-  r.classList.add('show');
-  const pct=Math.round(qC/qList.length*100);
-  document.getElementById('qEm').textContent=pct>=80?'🎉':pct>=50?'👍':'💪';
-  document.getElementById('qSub').textContent=`${qList.length}문제 중 ${qC}개 정답 (${pct}%)`;
-}
-
-// ════════════════════════════════════
 //  MEANING QUIZ (뜻→영어 객관식)
 // ════════════════════════════════════
+let mWrongList = []; // 틀린 문제 저장
+
 function startMeaning(){
-  mList=shuffle([...curList]); mIdx=0; mC=0; mW=0;
+  mList=shuffle([...curList]); mIdx=0; mC=0; mW=0; mWrongList=[];
   document.getElementById('mResult').classList.remove('show');
+  document.getElementById('mRetryWrong').style.display='none';
   updateScores('m');
   renderM();
 }
@@ -835,9 +1000,22 @@ function renderM(){
   document.getElementById('mL').textContent=mList.length-mIdx;
   const opts=shuffle([item,...getRandWrong(item,3,'w')]);
   document.getElementById('mOpts').innerHTML=opts.map(o=>`
-    <button class="qopt" onclick="answerQ(this,'${esc(o.w)}','${esc(item.w)}','meaning')">${o.w}</button>
+    <button class="qopt" onclick="answerM(this,'${esc(o.w)}','${esc(item.w)}',${mIdx})">${o.w}</button>
   `).join('');
   document.getElementById('mNext').classList.remove('show');
+}
+function answerM(btn,chosen,correct,idx){
+  document.querySelectorAll('#mOpts .qopt').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===correct) b.classList.add('correct');
+  });
+  if(chosen===correct){ mC++; btn.classList.add('correct');}
+  else{ mW++; btn.classList.add('wrong'); mWrongList.push(mList[idx]);}
+  updateScores('m');
+  document.getElementById('mNext').classList.add('show');
+}
+function nextQ(type){
+  if(type==='meaning'){mIdx++;renderM();}
 }
 function endMeaning(){
   document.getElementById('mOpts').innerHTML='';
@@ -847,15 +1025,22 @@ function endMeaning(){
   const pct=Math.round(mC/mList.length*100);
   document.getElementById('mEm').textContent=pct>=80?'🎉':pct>=50?'👍':'💪';
   document.getElementById('mSub').textContent=`${mList.length}문제 중 ${mC}개 정답 (${pct}%)`;
+  if(mWrongList.length>0){
+    document.getElementById('mRetryWrong').style.display='inline-block';
+    document.getElementById('mRetryWrong').textContent=`틀린 ${mWrongList.length}문제 다시 풀기`;
+  }
 }
 
 // ════════════════════════════════════
 //  SPELLING
 // ════════════════════════════════════
+let spWrongList = [];
+
 function startSpell(){
-  spList=shuffle([...curList]); spIdx=0; spC=0; spW=0; spPending=false;
+  spList=shuffle([...curList]); spIdx=0; spC=0; spW=0; spPending=false; spWrongList=[];
   document.getElementById('spResult').classList.remove('show');
-  document.getElementById('spWord').parentElement.style.display='block';
+  document.getElementById('spRetryWrong').style.display='none';
+  document.getElementById('spWord').closest('.spell-q-box').style.display='block';
   updateScores('sp');
   renderSpell();
 }
@@ -886,28 +1071,46 @@ function submitSpell(){
     inp.className='spell-input ng';
     fb.textContent=`❌ 정답: ${item.w}`; fb.className='spell-fb ng';
     inp.classList.add('shake'); setTimeout(()=>inp.classList.remove('shake'),350);
-    spW++;
+    spW++; spWrongList.push(item);
   }
   updateScores('sp');
   spPending=true;
 }
 function endSpell(){
-  document.getElementById('spWord').parentElement.style.display='none';
+  document.getElementById('spWord').closest('.spell-q-box').style.display='none';
   const r=document.getElementById('spResult');
   r.classList.add('show');
   const pct=Math.round(spC/spList.length*100);
   document.getElementById('spSub').textContent=`${spList.length}문제 중 ${spC}개 정답 (${pct}%)`;
+  if(spWrongList.length>0){
+    document.getElementById('spRetryWrong').style.display='inline-block';
+    document.getElementById('spRetryWrong').textContent=`틀린 ${spWrongList.length}문제 다시 풀기`;
+  }
+}
+
+// 틀린 문제만 다시 풀기
+function retryWrong(type){
+  if(type==='meaning'){
+    mList=shuffle([...mWrongList]); mIdx=0; mC=0; mW=0; mWrongList=[];
+    document.getElementById('mResult').classList.remove('show');
+    document.getElementById('mRetryWrong').style.display='none';
+    updateScores('m');
+    renderM();
+  } else {
+    spList=shuffle([...spWrongList]); spIdx=0; spC=0; spW=0; spPending=false; spWrongList=[];
+    document.getElementById('spResult').classList.remove('show');
+    document.getElementById('spRetryWrong').style.display='none';
+    document.getElementById('spWord').closest('.spell-q-box').style.display='block';
+    updateScores('sp');
+    renderSpell();
+  }
 }
 
 // ════════════════════════════════════
 //  UTILS
 // ════════════════════════════════════
 function updateScores(prefix){
-  if(prefix==='q'){
-    document.getElementById('qC').textContent=qC;
-    document.getElementById('qW').textContent=qW;
-    document.getElementById('qL').textContent=Math.max(0,qList.length-qIdx);
-  } else if(prefix==='m'){
+  if(prefix==='m'){
     document.getElementById('mC').textContent=mC;
     document.getElementById('mW').textContent=mW;
     document.getElementById('mL').textContent=Math.max(0,mList.length-mIdx);
